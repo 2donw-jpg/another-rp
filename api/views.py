@@ -1,21 +1,25 @@
-from django.shortcuts import render
-from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-from django.http import HttpResponse
+from rest_framework import status
+from django.shortcuts import get_object_or_404
 from zybal.models import Profile
-from api.serializer import ProfileSerializer
+from api.serializers import ProfileSerializer
 
-@api_view(['GET', 'POST'])
-def users_list(request):
-    if request.method == 'GET':
-        profiles = Profile.objects.all()
-        serializer = ProfileSerializer(profiles, many=True)
+class ProfileListAPIView(ListAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+class ProfileAPIView(APIView):    
+    def get(self, request, user_id):
+        profile = get_object_or_404(Profile, user__id=user_id)
+        serializer = ProfileSerializer(profile)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
-        serializer = ProfileSerializer(data=request.data)
+    def put(self, request, user_id):
+        profile = get_object_or_404(Profile, user__id=user_id)
+        serializer = ProfileSerializer(profile, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

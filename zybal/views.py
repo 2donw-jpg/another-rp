@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from zybal.models import Profile
 from django.contrib import messages
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 
 def sign_up_view(request):
@@ -17,28 +18,29 @@ def sign_up_view(request):
             if User.objects.filter(email=email).exists():
                 # Make a notification that the email is already taken
                 messages.info(request, 'Email already used')
-                return redirect('sign_up_view')
+                return redirect('sign_up')
             elif User.objects.filter(username=username).exists():
                 # Make a notification that the username is already taken
                 messages.info(request, 'Username already used') 
-                return redirect('sign_up_view')
+                return redirect('sign_up')
             else:
                 user = User.objects.create_user(username=username, email=email, password=password)
                 new_profile = Profile.objects.create(user=user, id_user=user.pk)
-                return redirect('sign_in_view')
+                
+                return redirect('sign_in')
         else:
             messages.info(request, 'Passwords do not match')
-            return redirect('sign_up_view')
+            return redirect('sign_up')
 
     return render(request, 'accounts/auth-signup.html')
 
 
-def sign_in_view(request):
 
+
+def sign_in_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-
         user = authenticate(username=username, password=password)
 
         if user is not None:
@@ -46,23 +48,31 @@ def sign_in_view(request):
             return redirect('home')
         else:
             messages.info(request, 'User and/or Password incorrect')
-            return redirect('sign_in_view')
+            return redirect('sign_in')
     else:
         return render(request, 'accounts/auth-signin.html')
 
 
+@login_required(login_url='sign_in')
 def sign_out_view(request):
-    logout()
+    logout(request)
     return render(request, 'accounts/auth-signin.html')
 
 
+@login_required(login_url='sign_in')
+def settings_view(request):
+    logout(request)
+    return render(request, 'pages/settings.html')
 
 
-def password_reset(request):
+
+def password_reset_view(request):
 
     return render(request, 'accounts/auth-reset.html')
 
 
-
+@login_required(login_url='sign_in')
 def home_view(request):
     return render(request,'pages/index.html')
+
+

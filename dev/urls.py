@@ -23,7 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('zybal.urls')),
     path('api/', include('api.urls')),
-
 ]
 
 
