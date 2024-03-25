@@ -35,8 +35,6 @@ def sign_up_view(request):
     return render(request, 'accounts/auth-signup.html')
 
 
-
-
 def sign_in_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -65,14 +63,15 @@ def settings_view(request):
     return render(request, 'pages/settings.html')
 
 
-
 def password_reset_view(request):
-
     return render(request, 'accounts/auth-reset.html')
 
 
 @login_required(login_url='sign_in')
 def home_view(request):
-    return render(request,'pages/index.html')
+    profile = Profile.objects.get(id_user=request.user.pk)
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    print(profile.profile_image)
+    return render(request, 'pages/index.html')
 
 

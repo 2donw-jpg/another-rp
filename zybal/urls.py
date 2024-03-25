@@ -7,7 +7,5 @@ urlpatterns = [
     path('accounts/password-reset/', password_reset_view, name='password_reset'),
     path('accounts/logout/', sign_out_view, name='logout'),
 
-
-    
     path('', home_view, name='home'),
 ]

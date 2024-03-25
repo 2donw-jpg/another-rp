@@ -30,23 +30,7 @@
                 <li class="nav-item"><a href="/home/" class="nav-link active">home</a></li>
                 <li class="nav-item"><a href="home/profile/" class="nav-link">profile</a></li>
                 <li class="nav-item"><a href="#modalview" class="nav-link" data-toggle="modal">messages</a></li>
-
-
-
-
-
-
-
-
-
                 <li class="nav-item"><a href="accounts/logout/" class="nav-link">logout</a></li>
-
-
-
-
-
-
-
                 <li class="nav-item"><a href="#" class="nav-link d-md-none">growl</a></li>
                 <li class="nav-item"><a href="#" class="nav-link d-md-none">logout</a></li>
 
@@ -57,10 +41,6 @@
             </form>
             <a href="home/notification/" class="text-decoration-none" style="color:#CBE4F2;font-size:22px;"><i class="far fa-bell ml-3 d-none d-md-block"></i></a> 
             <img src="img/avatar-dhg.png" alt="" class="rounded-circle ml-3 d-none d-md-block" width="32px" height="32px">
-
-
-
-
 
         </div>
 
@@ -281,18 +261,23 @@
                 <div class="left-column">
 
 
-                    <div class="card card-left1 mb-4" >
+                    <div class="card card-left1 mb-4">
                         <img src="img/photo-1455448972184-de647495d428.jpg" alt="" class="card-img-top img-fluid">
-                        <div class="card-body text-center ">
-                            <img src="img/avatar-dhg.png" alt="img" width="120px" height="120px" class="rounded-circle mt-n5">
-                            <h5 class="card-title">Dave Gamache</h5>
-                            <p class="card-text text-justify mb-2">I wish i was a little bit taller, wish i was a baller, wish i had a girl… also.</p>
+                        <div class="card-body text-center">
+                            <img src="{{ profile.profile_image }}" alt="profile image" width="120px" height="120px" class="rounded-circle mt-n5">
+                            <h5 class="card-title">{{ user.username }}</h5> <!-- Assuming 'user' is the variable containing user information -->
+                            <p class="card-text text-justify mb-2">{{ profile.bio }}</p> <!-- Assuming 'bio' is a field in the user model -->
                             <ul class="list-unstyled nav justify-content-center">
-                               <a href="#" class="text-dark text-decoration-none"> <li class="nav-item">Friends <br> <strong>12M</strong></li></a>
-                              <a href="#" class="text-dark text-decoration-none"> <li class="nav-item">Enimes <br> <strong>1</strong></li></a> 
+                                <a href="#" class="text-dark text-decoration-none">
+                                    <li class="nav-item">Followers<br><strong>{{ profile.followers }}</strong></li> <!-- Assuming 'followers' is a field in the user model -->
+                                </a>
+                                <a href="#" class="text-dark text-decoration-none">
+                                    <li class="nav-item">Following<br><strong>{{ profile.following }}</strong></li> <!-- Assuming 'following' is a field in the user model -->
+                                </a>
                             </ul>
-
                         </div>
+                    </div>
+                    
 
 
 
