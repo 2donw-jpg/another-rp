@@ -5,6 +5,8 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from zybal.models import Profile
 from api.serializers import ProfileSerializer
+from dev import settings
+import os
 
 class ProfileListAPIView(ListAPIView):
     queryset = Profile.objects.all()
@@ -23,3 +25,6 @@ class ProfileAPIView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+

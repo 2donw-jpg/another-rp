@@ -3,8 +3,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from zybal.models import Profile
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.contrib.auth.decorators import login_required
+import dev.settings as settings
+import os, mimetypes
+
 
 
 def sign_up_view(request):
@@ -69,9 +72,13 @@ def password_reset_view(request):
 
 @login_required(login_url='sign_in')
 def home_view(request):
-    profile = Profile.objects.get(id_user=request.user.pk)
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-    print(profile.profile_image)
     return render(request, 'pages/index.html')
 
+def serve_image(request, image_path):
+
+    image_full_path = os.path.join(settings.MEDIA_ROOT, image_path)
+    content_type, _ = mimetypes.guess_type(image_full_path)
+    if content_type is None:
+        content_type = 'application/octet-stream'  # Default to binary file if type cannot be determined
+    return FileResponse(open(image_full_path, 'rb'), content_type=content_type)
 
