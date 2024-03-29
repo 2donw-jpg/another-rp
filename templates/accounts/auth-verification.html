@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Password Reset | Zybal</title>
+    <title>Reset Password | Zybal</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <!-- Importing Tailwind CSS -->
@@ -18,13 +18,12 @@
                 <div class="mb-4">
                     <i class="feather icon-lock auth-icon text-4xl mb-4"></i>
                 </div>
-                <h3 class="mb-4">Password Reset</h3>
-                <div class="mb-4">
-                    <input type="email" name="email" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Email" autocapitalize="none" autocomplete="email" maxlength="150" required="" id="id_email">
+                <h3 class="mb-4">Enter Verification Code</h3>
+                <div class="mb-6">
+                    <input type="text" name="verification_code" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Verification Code" autocapitalize="none" autocomplete="off" maxlength="6" required="" id="id_verification_code">
                 </div>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">Reset Password</button>
-                <p class="text-xs text-gray-500">Remembered your password? <a href="/accounts/login/" class="text-blue-500">Login</a></p>
-                <p class="text-xs text-gray-500">Don’t have an account? <a href="/accounts/register/" class="text-blue-500">Signup</a></p>
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">Verify</button>
+                <p class="text-xs text-gray-500">Didn't receive the code? <a href="#" class="text-blue-500">Resend</a></p>
             </form>
         </div>
     </div>

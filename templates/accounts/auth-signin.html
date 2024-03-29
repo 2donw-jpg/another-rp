@@ -1,72 +1,46 @@
 {% load static %}
 
-
 <!DOCTYPE html>
-<html lang="en"><head>
-  
-
-<title>Sign In | Zybal</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-
-<!-- Favicon icon -->
-<link rel="icon" href="../../static/assets/images/favicon.ico" type="image/x-icon">
-<!-- fontawesome icon -->
-<link rel="stylesheet" href="../../static/assets/fonts/fontawesome/css/fontawesome-all.min.css">
-<!-- animation css -->
-<link rel="stylesheet" href="../../static/assets/plugins/animation/css/animate.min.css">
-<!-- vendor css -->
-<link rel="stylesheet" href="../../static/assets/css/style.css">
-<!-- dark mode css -->
-<link rel="stylesheet" href="../../static/assets/css/dark.css">
-  
+<html lang="en">
+<head>
+    <title>Sign In | Zybal</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <!-- Importing Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="dark">
-    <div class="auth-wrapper">
-        <div class="auth-content">
-            <div class="auth-bg">
-            </div>
-            <div class="card">
-                <form method="post" class="card-body text-center">
-                    {% csrf_token %}
-                    <div class="mb-4">
-                        <i class="feather icon-unlock auth-icon"></i>
-                    </div>
-                    <h3 class="mb-4">Login</h3>
-                    
-                    
-                    <div class="input-group mb-3">
-                        <input type="text" name="username" class="form-control" placeholder="Username" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
-                    </div>
-                    
-                    <div class="input-group mb-3">
-                        <input type="password" name="password" class="form-control" placeholder="Password" required="" id="id_password">
-                    </div>
-                    
-                    <button class="btn btn-primary shadow-2 mb-4">Login</button>
-                    <p class="mb-2 text-muted">Forgot password? <a href="/accounts/password-reset/">Reset</a></p>
-                    <p class="mb-0 text-muted">Don’t have an account? <a href="/accounts/register/">Signup</a></p>
-                </form>
-            </div>
+<div class="flex justify-center items-center h-screen bg-gray-200">
+    <div class="w-full max-w-xs">
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <form method="post" class="text-center">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <i class="feather icon-unlock auth-icon text-4xl mb-4"></i>
+                </div>
+                <h3 class="mb-4">Login</h3>
+                <div class="mb-4">
+                    <input type="text" name="username" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Username" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
+                </div>
+                <div class="mb-6">
+                    <input type="password" name="password" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Password" required="" id="id_password">
+                </div>
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">Login</button>
+                <button class="bg-white hover:bg-blue-700 border border-blue-500 text-blue-500 hover:text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">Continue with Google</button>
+                <button class="bg-white hover:bg-blue-700 border border-blue-500 text-blue-500 hover:text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">Continue with Windows</button>
+
+
+                <p class="text-xs text-gray-500">Forgot password? <a href="/accounts/password-reset/" class="text-blue-500">Reset</a></p>
+                <p class="text-xs text-gray-500">Don’t have an account? <a href="/accounts/register/" class="text-blue-500">Signup</a></p>
+            </form>
         </div>
     </div>
+</div>
 
-    <label class="d-none">
-        <i class="icon feather icon-sun" id="theme-indicator"></i>
-        <input type="checkbox" id="theme-switch" class="d-none">
-    </label>
+<label class="hidden">
+    <i class="icon feather icon-sun" id="theme-indicator"></i>
+    <input type="checkbox" id="theme-switch" class="hidden">
+</label>
 
-
-
-  
-
-<!-- Required Js -->
-<script src="/static/assets/js/vendor-all.min.js"></script>
-<script src="/static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-<script src="/static/assets/js/pcoded.min.js"></script>
-<script src="/static/assets/js/dark-mode.js"></script>
-
-  
-
-
-</body></html>
+</body>
+</html>

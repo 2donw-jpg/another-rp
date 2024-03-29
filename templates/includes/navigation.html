@@ -1,150 +1,55 @@
-{% load static %}
+<style>
+    .btn:focus {
+        outline: none;
+        box-shadow: none;
+    }
+</style>
 
-<header class="navbar pcoded-header navbar-expand-lg navbar-light">
-  <div class="m-header">
-    <a class="mobile-menu" id="mobile-collapse1" href="javascript:"><span></span></a>
-    <a href="{% url 'index' %}" class="b-brand">
-      <div class="b-bg">
-        <i class="feather icon-trending-up"></i>
-      </div>
-      <span class="b-title">Datta Able</span>
+
+
+<nav class="navbar navbar-expand-md navbar-dark mb-4 shadow" style="background-color:#026842">
+
+    <a href="" class="navbar-brand">
+        <img src="../../static/assets/images/logo.png" alt="logo" class="img-fluid" width="120px" height="150px">
     </a>
-  </div>
-  <a class="mobile-menu" id="mobile-header" href="javascript:">
-    <i class="feather icon-more-horizontal"></i>
-  </a>
-  <div class="collapse navbar-collapse">
-    <ul class="navbar-nav mr-auto">
-      <li><a href="javascript:" class="full-screen" onclick="javascript:toggleFullScreen()"><i
-            class="feather icon-maximize"></i></a></li>
-      <li class="nav-item dropdown">
-        <a class="dropdown-toggle" href="javascript:" data-toggle="dropdown">Dropdown</a>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="javascript:">Action</a></li>
-          <li><a class="dropdown-item" href="javascript:">Another action</a></li>
-          <li><a class="dropdown-item" href="javascript:">Something else here</a></li>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#responsive" aria-controls="responsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="responsive">
+        <ul class="navbar-nav mr-auto text-capitalize">
+            <li class="nav-item"><a href="" class="nav-link active">Inicio</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Perfil</a></li>
         </ul>
-      </li>
-      <li class="nav-item">
-        <div class="main-search">
-          <div class="input-group">
-            <input type="text" id="m-search" class="form-control" placeholder="Search . . .">
-            <a href="javascript:" class="input-group-append search-close">
-              <i class="feather icon-x input-group-text"></i>
-            </a>
-            <span class="input-group-append search-btn btn btn-primary">
-              <i class="feather icon-search input-group-text"></i>
-            </span>
-          </div>
+
+        <form action="" class="form-inline ml-auto d-none d-md-block mr-3" >
+            <input type="text" name="search" id="search" placeholder="Search" class="form-control form-control-sm">
+        </form>
+
+
+        
+
+
+
+
+    </div>
+
+    <a href="#modalview" class="text-decoration-none mr-3" data-toggle="modal">
+        <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="24" height="24" fill="#FFFFFF"><path d="M4.068,18H19.724a3,3,0,0,0,2.821-4.021L19.693,6.094A8.323,8.323,0,0,0,11.675,0h0A8.321,8.321,0,0,0,3.552,6.516l-2.35,7.6A3,3,0,0,0,4.068,18Z"/><path d="M7.1,20a5,5,0,0,0,9.8,0Z"/></svg>
+    </a>
+
+
+
+    
+    <div class="dropdown mr-3">
+        <button class="btn btn-secondary p-0 border-0 bg-transparent" type="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img id="profileImage" src="{{ profile.profile_image.url }}" alt="profile_icon" class="rounded-circle" width="50px" height="50px">
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
+            <a class="dropdown-item" href="#">Configuraciones</a>
+            <a class="dropdown-item" href="#">Preferencias de Idioma</a>
+            <a class="dropdown-item" href="accounts/logout/">Cerrar Sesión</a>
         </div>
-      </li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-      <li>
-        <label>
-          <i class="icon feather icon-sun" id="theme-indicator"></i>
-          <input type="checkbox" id="theme-switch" class="d-none">
-        </label>
-      </li>
-      <li>
-        <div class="dropdown">
-          <a class="dropdown-toggle" href="javascript:" data-toggle="dropdown"><i
-              class="icon feather icon-bell"></i></a>
-          <div class="dropdown-menu dropdown-menu-right notification">
-            <div class="noti-head">
-              <h6 class="d-inline-block m-b-0">Notifications</h6>
-              <div class="float-right">
-                <a href="javascript:" class="m-r-10">mark as read</a>
-                <a href="javascript:">clear all</a>
-              </div>
-            </div>
-            <ul class="noti-body">
-              <li class="n-title">
-                <p class="m-b-0">NEW</p>
-              </li>
-              <li class="notification">
-                <div class="media">
-                  <img class="img-radius" src="{% static 'assets/images/user/avatar-1.jpg' %}" alt="Generic placeholder image">
-                  <div class="media-body">
-                    <p><strong>John Doe</strong><span class="n-time text-muted"><i
-                          class="icon feather icon-clock m-r-10"></i>30 min</span></p>
-                    <p>New ticket Added</p>
-                  </div>
-                </div>
-              </li>
-              <li class="n-title">
-                <p class="m-b-0">EARLIER</p>
-              </li>
-              <li class="notification">
-                <div class="media">
-                  <img class="img-radius" src="{% static 'assets/images/user/avatar-2.jpg' %}" alt="Generic placeholder image">
-                  <div class="media-body">
-                    <p><strong>Joseph William</strong><span class="n-time text-muted"><i
-                          class="icon feather icon-clock m-r-10"></i>30 min</span></p>
-                    <p>Prchace New Theme and make payment</p>
-                  </div>
-                </div>
-              </li>
-              <li class="notification">
-                <div class="media">
-                  <img class="img-radius" src="{% static 'assets/images/user/avatar-3.jpg' %}" alt="Generic placeholder image">
-                  <div class="media-body">
-                    <p><strong>Sara Soudein</strong><span class="n-time text-muted"><i
-                          class="icon feather icon-clock m-r-10"></i>30 min</span></p>
-                    <p>currently login</p>
-                  </div>
-                </div>
-              </li>
-            </ul>
-            <div class="noti-footer">
-              <a href="javascript:">show all</a>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="dropdown drp-user">
-          <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="icon feather icon-settings"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right profile-notification">
-            <div class="pro-head">
-              <img src="{% static 'assets/images/user/avatar-1.jpg' %}" class="img-radius" alt="User-Profile-Image">
-              <span>John Doe</span>
-              {% if request.user.is_authenticated %}
-                {% if request.user.is_superuser %}
-                <a href="{% url 'admin:logout' %}" class="dud-logout" title="Logout">
-                {% else %}
-                <a href="{% url 'logout' %}" class="dud-logout" title="Logout">
-                {% endif %}
-                  <i class="feather icon-log-out"></i>
-                </a>
-              {% endif %}
-            </div>
-            <ul class="pro-body">
-              <li><a href="#" class="dropdown-item"><i class="feather icon-settings"></i>
-                  Settings</a></li>
-              <li><a href="{% url 'profile' %}" class="dropdown-item"><i class="feather icon-user"></i>
-                  Profile</a></li>
-              <li><a href="#" class="dropdown-item"><i class="feather icon-mail"></i> My
-                  Messages</a></li>
-              <li><a href="#" class="dropdown-item"><i class="feather icon-lock"></i> Lock
-                  Screen</a></li>
-              {% if request.user.is_authenticated %}
-              <li>
-                {% if request.user.is_superuser %}
-                <a href="{% url 'admin:password_change' %}" class="dropdown-item">
-                {% else %}
-                <a href="{% url 'password_change' %}" class="dropdown-item">
-                {% endif %}
-                  <i class="feather icon-edit"></i>Change Password
-                </a>
-              </li>
-              {% endif %}
-            </ul>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-</header>
+    </div>
+</nav>

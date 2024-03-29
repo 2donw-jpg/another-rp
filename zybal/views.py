@@ -5,8 +5,12 @@ from zybal.models import Profile
 from django.contrib import messages
 from django.http import HttpResponse, FileResponse
 from django.contrib.auth.decorators import login_required
-import dev.settings as settings
-import os, mimetypes
+import dev.settings as dev_settings
+import os, mimetypes, random, string
+
+from django.shortcuts import render
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 
@@ -67,18 +71,57 @@ def settings_view(request):
 
 
 def password_reset_view(request):
+
+
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        user = User.objects.get(email=email)  # Assuming you have a User model
+        if user is not None:
+
+            return render(request, 'accounts/auth-verification.html')
+        else:
+            return HttpResponse('No user found with that email address.')
+    
     return render(request, 'accounts/auth-reset.html')
+"""
+        # Generate a random token
+        token = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+        
+        # Save token to the database
+        #password_reset_token = PasswordResetToken.objects.create(user=user, token=token)
+        
+        # Send email with token
+        send_mail(
+            'Password Reset',  # Subject
+            f'Click the following link to reset your password: {settings.BASE_URL}/reset_password/{token}',  # Message
+            'your_email@example.com',  # Sender email
+            [email],  # Recipient email
+            fail_silently=False
+        )
+        
+        return HttpResponse('Password reset email sent successfully.')
+"""
+    
 
 
 @login_required(login_url='sign_in')
 def home_view(request):
-    return render(request, 'pages/index.html')
+    profile = Profile.objects.get(user=request.user)
+    # Obtener el número de seguidores y siguiendo (puedes implementar lógica real aquí)
+    followers_count = 14
+    following_count = 1
+    context = {
+        'profile': profile,
+        'followers_count': followers_count,
+        'following_count': following_count,
+    }
+    return render(request, 'pages/index.html', context)
 
 def serve_image(request, image_path):
 
-    image_full_path = os.path.join(settings.MEDIA_ROOT, image_path)
+    image_full_path = os.path.join(dev_settings.MEDIA_ROOT, image_path)
     content_type, _ = mimetypes.guess_type(image_full_path)
     if content_type is None:
-        content_type = 'application/octet-stream'  # Default to binary file if type cannot be determined
+        content_type = 'application/octet-stream'
     return FileResponse(open(image_full_path, 'rb'), content_type=content_type)
 
