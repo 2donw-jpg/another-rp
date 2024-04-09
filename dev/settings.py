@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-9533qbo@u!vd+u5e9y8m_y5=un8y=h^w28b&&byc8^-m0$az0#
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = ['192.168.1.95','172.17.12.15']
+ALLOWED_HOSTS = ['172.17.12.15']
 
 
 # Application definition
@@ -40,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'zybal',
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -50,7 +50,31 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
 ]
+
+# Course headers 
+CORS_ALLOWED_ORIGINS = [
+    "https://example.com",
+    "https://sub.example.com",
+    "http://localhost:8080",
+    "http://127.0.0.1:9000",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com",
+]
+
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
+
 
 ROOT_URLCONF = 'dev.urls'
 

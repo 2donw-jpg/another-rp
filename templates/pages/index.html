@@ -1,151 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
-    
-    <link rel="icon" href="../../static/assets/images/favicon.ico" type="image/x-icon">
+    <title>Zybal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <link rel="stylesheet" href="style.css">
-    
-
     <link rel="stylesheet" href="lightbox.min.css">
-    <script type="text/javascript" src="lightbox-plus-jquery.min.js"></script>
+    <style>
+        .card {
+            background-color: transparent;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%; /* Ensures the card fills the container */
+        }
 
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column; /* Set the flex direction to column */
+            height: 100%; /* Ensure the card body fills the container vertically */
+        }
 
-    <title>Zybal</title>
-    </head>
+        .form-control {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1; /* Allow textarea to grow and fill remaining space */
+            resize: none; /* Prevent resizing of the textarea */
+            min-height: 100%; /* Ensure the textarea fills the entire card-body vertically */
+        }
 
-
-
-<body>
-
-
-    {% include 'includes/nav-bar.html' %}
-
-    {% include 'includes/notification-preview.html' %}
+        .btn {
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: bold;
+        }
+    </style>
     
+</head>
+<body>
+    <!-- Navigation Bar -->
+    {% include 'includes/nav-bar.html' %}
+    <!-- Notification Preview -->
+    {% include 'includes/notification-preview.html' %}
     <div class="container">
         <div class="row">
+            <!-- Aside -->
             {% include 'includes/aside.html' %}
             <div class="col-md-9">
-                <div>
-                    <div class="middle-column">
-                        <div class="card">
-                            <div class="card-header bg-transparent">
-                                <form class="form-inline">
-                                    <div class="input-group w-100">
-                                        <input type="text" name="message" id="message" placeholder="Message" class="form-control form-control-md">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <i class="fas fa-camera"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                <!-- Tweet Form -->
+                <div class="middle-column">
+                    <div class="card">
+                        <div class="card-header bg-transparent">
+
+
+
+
+
+
+
 
                             
-                            <div class="card-body">
-                                <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6 flex">
-                                    <!-- Profile Picture -->
-                                    <img src="../../media/profile_images/profile_UrDqCsJ.png" alt="Profile Picture" width="60px" height="60px"
-                                        class="rounded-circle mr-3">
-                                    <!-- Tweet Input Area -->
-                                    <div class="flex-grow">
-                                        <!-- User Info -->
-                                        <div class="flex items-center mb-4">
-                                            <!-- Username and Handle -->
+                            <form action="upload" method="POST" enctype="multipart/form-data" class="form-inline">
+                                {% csrf_token %}
+                                <div class="card border-0">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <img src="{{ profile.profile_image.url}}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
+                                            <div class="flex-grow-1">
+                                                <textarea class="form-control border-0 bg-transparent" placeholder="Qué está pasando?" rows="1" name="caption"></textarea>
+                                                <input type="file" class="form-control-file mt-3" id="image_upload" multiple>
+                                                <div class="preview-images"></div>
+                                            </div>
                                         </div>
-                                        <!-- Tweet Input -->
-                                        <textarea class="w-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg p-2 resize-none h-32"
-                                            placeholder="What's happening?"></textarea>
-                                        <!-- Tweet Button -->
-                                        <div class="flex justify-between items-center mt-4">
-                                            <!-- Character Count -->
-                                            <span class="text-sm text-gray-500">280 characters remaining</span>
-                                            <!-- Tweet Button -->
-                                            <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
-                                                Tweet
-                                            </button>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <span class="text-secondary">280 characters remaining</span>
+                                            <button type="submit" class="btn btn-primary">Tweet</button>
                                         </div>
                                     </div>
                                 </div>
+                            </form>
 
-                                <div class="media">
-                                    <img src="../../media/profile_images/profile_UrDqCsJ.png" alt="img" width="60px" height="60px" class="rounded-circle mr-3">
-                                    <div class="media-body">
-                                        <h5>Bowser</h5>
-                                        <h6>@Bowser</h6>
-                                        <p class="card-text text-justify">A su ptm :O</p>
-                                        <hr>
-                                    </div>
 
-                                    <small>5 min</small>
+
+
+
+
+
+                            
+                        </div>
+                        <div class="card-body">
+                            
+                            {% for post in posts %}
+                            <div class="media">
+                                <img src="{{ post.user.profile_image.url }}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
+                                <div class="media-body">
+                                    <h5 class="mt-0">{{ post.user }}</h5>
+                                    <h6>@{{ post.user }}</h6>
+                                    <img src="{{ post.image }}" alt="Post Image" width="100%" class="mb-3"> <!-- Assuming post.image represents the image associated with the post -->
+                                    <p class="card-text text-justify">{{ post.caption }}</p>
+                                    <hr>
                                 </div>
-
-
-                                <div class="media">
-                                    <img src="../../media/profile_images/profile_UrDqCsJ.png" alt="img" width="60px" height="60px" class="rounded-circle mr-3">
-                                    <div class="media-body">
-                                        <h5>Bowser</h5>
-                                        <h6>@Bowser</h6>
-                                        <p class="card-text text-justify">Mario hjptm pndj de mrd</p>
-                                        <hr>
-                                    </div>
-
-                                    <small>3 días</small>
-                                </div>
-
-                                <div class="media">
-                                    <img src="../../media/profile_images/profile_UrDqCsJ.png" alt="img" width="60px" height="60px" class="rounded-circle mr-3">
-                                    <div class="media-body">
-                                        <h5>Bowser</h5>
-                                        <h6>@Bowser</h6>
-                                        <p class="card-text text-justify">Los impuestos</p>
-                                        <hr>
-                                    </div>
-
-                                    <small>4 días</small>
-                                </div>
-
-
+                                <small>{{ post.created_at }}</small>
                             </div>
-                            <hr>
-                            <div class="card-body">
-                                <div class="media">
-                                    <img src="img/avatar-fat.jpg" alt="img" width="55px" height="55px" class="rounded-circle mr-3">
-                                    <div class="media-body">
-                                        <h5>Jacob Thornton</h5>
-                                        <p class="text-justify">Donec id elit non mi porta gravida at eget metus. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                    </div>
-                                    <small>14 min</small>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="card-body">
-                                <div class="media">
-                                    <img src="img/avatar-mdo.png" alt="img" width="55px" height="55px" class="rounded-circle mr-3">
-                                    <div class="media-body">
-                                        <h5>Mark Otto</h5>
-                                <p class="text-justify">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
-                             <a href="img/mid5.jpg" data-lightbox="id"><img src="img/mid5.jpg" alt="" class="img-fluid shadow-sm img-thumbnail">   </a>   
-                
-                            </div>
-                
-                
-                            <small class="text-muted">10 min</small>
-                
+                            {% endfor %}
+                        </div>
+
+
+
+
+
+
+                    </div>
                 </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                
             </div>
         </div>
     </div>
@@ -154,63 +124,11 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<footer class="navbar navbar-expand-md navbar-dark mb-4" style="background-color:#026842; width: 100%;">
-    <div class="container">
-        <ul class="navbar-nav mx-auto flex-wrap">
-            <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Help</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Terms</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Privacy</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Cookies</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Ads</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Info</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Brand</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Status</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Apps</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Jobs</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Advertise</a></li>
-        </ul>
-    </div>
-</footer>
-
-
-
-
-
-
-<!------------------------Light BOx OPtions------------->
-<script>
-        lightbox.option({
-          
-        })
-    </script>
-
-
-
-<!------------------------Light BOx OPtions------------->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- Lightbox Options -->
+    <script src="lightbox-plus-jquery.min.js"></script>
+    <!-- Bootstrap and jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -121,7 +121,7 @@ def settings_view(request):
     profile = Profile.objects.get(user=user)
 
     if request.method == 'POST':
-        # Check if 'image' file is uploaded
+
         if 'image' in request.FILES:
             profile.profile_image = request.FILES['image']
         
@@ -145,28 +145,41 @@ def home_view(request):
     # Obtener el número de seguidores y siguiendo (puedes implementar lógica real aquí)
     followers_count = 15
     following_count = 15
+    posts = Post.objects.all() 
 
 
     context = {
         'profile': profile,
         'followers_count': followers_count,
         'following_count': following_count,
+        'posts': posts,
     }
     return render(request, 'pages/index.html', context)
 
 
+
 @login_required(login_url='signin')
-def upload(request):
+def upload_view(request):
     if request.method == 'POST':
         user = request.user.username
+        profile = Profile.objects.get(user=request.user)
         image = request.FILES.get('image_upload')
         caption = request.POST.get('caption', '')
 
+
+
+        print('Datos:')
+        print(caption)
+        print(user)
+        
         if not image: 
             image = None
+            print("No había imágen")
 
-        new_post = Post.objects.create(user=user, image=image, caption=caption)
+        new_post = Post.objects.create(user=profile, image=image, caption=caption)
         new_post.save()
+        print("Ya se guardó")
+
 
         return redirect('home')
 
