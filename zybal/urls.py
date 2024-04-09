@@ -8,4 +8,5 @@ urlpatterns = [
     path('accounts/logout/', sign_out_view, name='logout'),
 
     path('', home_view, name='home'),
+    path('home/settings/', settings_view, name='settings'),
 ]

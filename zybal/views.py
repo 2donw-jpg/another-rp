@@ -1,19 +1,19 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.contrib.auth import authenticate, login, logout
-from zybal.models import Profile
+from zybal.models import Profile, Post
 from django.contrib import messages
 from django.http import HttpResponse, FileResponse
 from django.contrib.auth.decorators import login_required
-import dev.settings as dev_settings
-import os, mimetypes, random, string
-
-from django.shortcuts import render
 from django.core.mail import send_mail
 from django.conf import settings
+import os
+import mimetypes
+import random
+import string
 
 
-
+#TODO When successfully sign up send it to settings
 def sign_up_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -42,6 +42,12 @@ def sign_up_view(request):
     return render(request, 'accounts/auth-signup.html')
 
 
+
+
+
+
+
+#TODO Notify user when failed login
 def sign_in_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -58,21 +64,21 @@ def sign_in_view(request):
         return render(request, 'accounts/auth-signin.html')
 
 
+
+
+
+
+#Sign Out
 @login_required(login_url='sign_in')
 def sign_out_view(request):
     logout(request)
-    return render(request, 'accounts/auth-signin.html')
+    return redirect('sign_in')
 
 
-@login_required(login_url='sign_in')
-def settings_view(request):
-    logout(request)
-    return render(request, 'pages/settings.html')
 
 
+#TODO apply the SMTP and the verification method
 def password_reset_view(request):
-
-
     if request.method == 'POST':
         email = request.POST.get('email')
         user = User.objects.get(email=email)  # Assuming you have a User model
@@ -101,15 +107,46 @@ def password_reset_view(request):
         
         return HttpResponse('Password reset email sent successfully.')
 """
+
+
+
+
+
+
+
+#FIXME This doesn't store the user attributes: first_name and last_name
+@login_required(login_url='sign_in')
+def settings_view(request):
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    if request.method == 'POST':
+        # Check if 'image' file is uploaded
+        if 'image' in request.FILES:
+            profile.profile_image = request.FILES['image']
+        
+
+        profile.user.first_name = request.POST.get('first_name', user.first_name)
+        profile.user.last_name = request.POST.get('last_name', user.last_name)
+        profile.bio = request.POST.get('bio', profile.bio)
+        profile.phone_number = request.POST.get('phone_number', profile.phone_number)
+        profile.save()
+        return redirect('home')
+
+    return render(request, 'pages/settings.html', {'profile': profile})
+
+
     
 
-
+#TODO apply the followers/following values from the user
 @login_required(login_url='sign_in')
 def home_view(request):
     profile = Profile.objects.get(user=request.user)
     # Obtener el número de seguidores y siguiendo (puedes implementar lógica real aquí)
-    followers_count = 14
-    following_count = 1
+    followers_count = 15
+    following_count = 15
+
+
     context = {
         'profile': profile,
         'followers_count': followers_count,
@@ -117,9 +154,31 @@ def home_view(request):
     }
     return render(request, 'pages/index.html', context)
 
-def serve_image(request, image_path):
 
-    image_full_path = os.path.join(dev_settings.MEDIA_ROOT, image_path)
+@login_required(login_url='signin')
+def upload(request):
+    if request.method == 'POST':
+        user = request.user.username
+        image = request.FILES.get('image_upload')
+        caption = request.POST.get('caption', '')
+
+        if not image: 
+            image = None
+
+        new_post = Post.objects.create(user=user, image=image, caption=caption)
+        new_post.save()
+
+        return redirect('home')
+
+    
+    return redirect('home')
+
+
+
+
+
+def serve_image(request, image_path):
+    image_full_path = os.path.join(settings.MEDIA_ROOT, image_path)
     content_type, _ = mimetypes.guess_type(image_full_path)
     if content_type is None:
         content_type = 'application/octet-stream'

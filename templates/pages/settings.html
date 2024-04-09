@@ -1,57 +1,85 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>User Settings | Zybal</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <!-- Importing Tailwind CSS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuraciones | Zybal</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="dark">
-<div class="flex justify-center items-center h-screen bg-gray-100">
-    <div class="w-full max-w-lg">
-        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <form method="post" class="text-center">
-                {% csrf_token %}
-                <div class="mb-4">
-                    <h2 class="text-2xl font-semibold mb-4">User Settings</h2>
+
+<body class="bg-gray-100">
+    <div class="container mx-auto py-6">
+        <h1 class="text-3xl font-semibold text-center mb-8">Configuraciones</h1>
+        <div class="flex flex-col md:flex-row">
+            <!-- Sidebar -->
+            <div class="w-full md:w-1/4 bg-white rounded-lg shadow-md mb-4 md:mr-4">
+                <div class="p-4 border-b border-gray-200">
+            
+                    <h2 class="text-xl font-semibold">Configuraciones</h2>
                 </div>
-                <div class="mb-4">
-                    <input type="text" name="first_name" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="First Name" autocapitalize="words" autocomplete="given-name" maxlength="150" required="" id="id_first_name">
+                <ul class="divide-y divide-gray-200">
+                    <li class="py-4 px-6 cursor-pointer hover:bg-gray-100">
+                        <a href="#profile" class="block text-blue-600 font-semibold category">Perfil</a>
+                    </li>
+                    
+                </ul>
+            </div>
+
+            <div class="w-full md:w-3/4 bg-white rounded-lg shadow-md mb-4 md:ml-4 ">
+               
+               
+               
+               
+               
+               
+                <div id="profile" class="p-4 border-b border-gray-200">
+                    <div class="container mx-auto py-6">
+                        <h1 class="text-3xl font-semibold text-center mb-8">Configuraciones de Perfil</h1>
+                        <form method="post">
+                            {% csrf_token %}
+                        <div class="max-w-lg mx-auto bg-white p-6 rounded-md shadow-md">
+                            <div class="mb-4">
+                                <input type="text" name="first_name" value="{{ profile.user.first_name }}" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="First Name" autocapitalize="words" autocomplete="given-name" maxlength="150" required="" id="id_first_name">                
+                            </div>
+                            <div class="mb-4">
+                                <input type="text" name="last_name" value="{{ profile.user.last_name }}" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Last Name" autocapitalize="words" autocomplete="family-name" maxlength="150" required="" id="id_last_name">
+                            </div>
+                            <div class="mb-4">
+                                <textarea name="bio" class="resize-none appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Bio" rows="4" id="id_bio">{{profile.bio}}</textarea>
+                            </div>
+                            <div class="mb-4 flex items-center justify-center">
+                                <!-- Display multiple images horizontally -->
+                                <div class="flex flex-wrap items-center">
+                                    <img src="{{ profile.profile_image.url }}" alt="profile_icon" width="150px" height="150px" class="mr-4">
+                                    <img src="{{ profile.profile_image.url }}" alt="profile_icon" width="80px" height="80px" class="mr-4">
+                                    <img src="{{ profile.profile_image.url }}" alt="profile_icon" width="50px" height="50px">
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <input type="file" name="profile_picture" value="{{ profile.profile_image.url }}" accept="image/*" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="id_profile_picture">
+                            </div>
+                            <div class="mb-4">
+                                <input type="email" name="email" value="{{ profile.user.email }}" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Email" autocapitalize="none" autocomplete="email" maxlength="254" required="" id="id_email">
+                            </div>
+                            <div class="mb-4">
+                                <input type="tel" name="phone_number" value="{{ profile.phone_number }}" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Phone Number" autocomplete="tel" maxlength="15" id="id_phone_number">
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="button" class="bg-gray-200 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4 mr-4">Cancel</button>
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">Save Changes</button>
+                            </div>
+                            
+                        </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <input type="text" name="last_name" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Last Name" autocapitalize="words" autocomplete="family-name" maxlength="150" required="" id="id_last_name">
-                </div>
-                <div class="mb-4">
-                    <textarea name="bio" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Bio" rows="4" id="id_bio"></textarea>
-                </div>
-                <div class="mb-4">
-                    <input type="file" name="profile_picture" accept="image/*" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="id_profile_picture">
-                </div>
-                <div class="mb-4">
-                    <input type="email" name="email" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Email" autocapitalize="none" autocomplete="email" maxlength="254" required="" id="id_email">
-                </div>
-                <div class="mb-4">
-                    <input type="tel" name="phone_number" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Phone Number" autocomplete="tel" maxlength="15" id="id_phone_number">
-                </div>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">Save Changes</button>
-            </form>
+                
+
+
+            </div>
         </div>
     </div>
-</div>
-
-<label class="hidden">
-    <i class="icon feather icon-sun" id="theme-indicator"></i>
-    <input type="checkbox" id="theme-switch" class="hidden">
-</label>
-
-<!-- Required Js -->
-<script src="{% static 'assets/js/vendor-all.min.js' %}"></script>
-<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'assets/js/pcoded.min.js' %}"></script>
-<script src="{% static 'assets/js/dark-mode.js' %}"></script>
-
 </body>
+
 </html>

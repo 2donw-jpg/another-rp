@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-9533qbo@u!vd+u5e9y8m_y5=un8y=h^w28b&&byc8^-m0$az0#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.95','172.17.12.15']
 
 
 # Application definition
@@ -134,6 +134,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 #SMTP
+"""
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'rp.zybal.com' 
 EMAIL_PORT = 587
@@ -143,3 +144,5 @@ EMAIL_HOST_PASSWORD = 'admin'
 
 
 BASE_URL = 'localhost:8000'
+
+"""
