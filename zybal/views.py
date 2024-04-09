@@ -114,7 +114,7 @@ def password_reset_view(request):
 
 
 
-#FIXME This doesn't store the user attributes: first_name and last_name
+
 @login_required(login_url='sign_in')
 def settings_view(request):
     user = request.user
@@ -123,17 +123,22 @@ def settings_view(request):
     if request.method == 'POST':
 
         if 'image' in request.FILES:
-            profile.profile_image = request.FILES['image']
+            profile.profile_image = request.FILES['image']  # Corrected key here
         
-
+        print()
+        print(profile.profile_image)
         profile.user.first_name = request.POST.get('first_name', user.first_name)
         profile.user.last_name = request.POST.get('last_name', user.last_name)
         profile.bio = request.POST.get('bio', profile.bio)
         profile.phone_number = request.POST.get('phone_number', profile.phone_number)
+
+
         profile.save()
+
         return redirect('home')
 
     return render(request, 'pages/settings.html', {'profile': profile})
+
 
 
     
@@ -145,7 +150,7 @@ def home_view(request):
     # Obtener el número de seguidores y siguiendo (puedes implementar lógica real aquí)
     followers_count = 15
     following_count = 15
-    posts = Post.objects.all() 
+    posts = Post.objects.all().order_by('-created_at')
 
 
     context = {

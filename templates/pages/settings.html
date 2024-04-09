@@ -53,7 +53,8 @@
                                 </div>
                             </div>
                             <div class="mb-4">
-                                <input type="file" name="profile_picture" value="{{ profile.profile_image.url }}" accept="image/*" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="id_profile_picture">
+
+                                <input type="file" name="image" value="{{ profile.profile_image.url }}" accept="image/*" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="id_profile_picture">
                             </div>
                             <div class="mb-4">
                                 <input type="email" name="email" value="{{ profile.user.email }}" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Email" autocapitalize="none" autocomplete="email" maxlength="254" required="" id="id_email">
