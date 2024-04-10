@@ -1,5 +1,5 @@
 from django.urls import path, include
-from zybal.views import upload_view, settings_view, sign_in_view, sign_up_view,sign_out_view, password_reset_view, home_view
+from zybal.views import profile_view,upload_view, settings_view, sign_in_view, sign_up_view,sign_out_view, password_reset_view, home_view
 urlpatterns = [
     path('accounts/settings/', settings_view, name='settings'),
     path('accounts/login/', sign_in_view, name='sign_in'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('', home_view, name='home'),
     path('home/settings/', settings_view, name='settings'),
     path('upload', upload_view, name='upload'),
+    path('profile/<str:pk>', profile_view, name='profile'),
 ]

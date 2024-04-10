@@ -32,7 +32,7 @@
                 <div id="profile" class="p-4 border-b border-gray-200">
                     <div class="container mx-auto py-6">
                         <h1 class="text-3xl font-semibold text-center mb-8">Configuraciones de Perfil</h1>
-                        <form method="post">
+                        <form method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                         <div class="max-w-lg mx-auto bg-white p-6 rounded-md shadow-md">
                             <div class="mb-4">
@@ -53,8 +53,8 @@
                                 </div>
                             </div>
                             <div class="mb-4">
-
-                                <input type="file" name="image" value="{{ profile.profile_image.url }}" accept="image/*" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="id_profile_picture">
+                                
+                                <input type="file" name="image" accept="image/*" enctype="multipart/form-data" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="image">
                             </div>
                             <div class="mb-4">
                                 <input type="email" name="email" value="{{ profile.user.email }}" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Email" autocapitalize="none" autocomplete="email" maxlength="254" required="" id="id_email">

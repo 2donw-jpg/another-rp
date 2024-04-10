@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, AbstractUser
 from django.contrib.auth import authenticate, login, logout
-from zybal.models import Profile, Post
+from zybal.models import Profile, Post, LikePost, FollowersCount
 from django.contrib import messages
 from django.http import HttpResponse, FileResponse
 from django.contrib.auth.decorators import login_required
@@ -121,20 +121,16 @@ def settings_view(request):
     profile = Profile.objects.get(user=user)
 
     if request.method == 'POST':
-
+        print("Does the user put an image?")
         if 'image' in request.FILES:
-            profile.profile_image = request.FILES['image']  # Corrected key here
+            profile.profile_image = request.FILES.get('image')
         
-        print()
-        print(profile.profile_image)
         profile.user.first_name = request.POST.get('first_name', user.first_name)
         profile.user.last_name = request.POST.get('last_name', user.last_name)
         profile.bio = request.POST.get('bio', profile.bio)
         profile.phone_number = request.POST.get('phone_number', profile.phone_number)
-
-
         profile.save()
-
+        
         return redirect('home')
 
     return render(request, 'pages/settings.html', {'profile': profile})
@@ -171,25 +167,44 @@ def upload_view(request):
         image = request.FILES.get('image_upload')
         caption = request.POST.get('caption', '')
 
-
-
-        print('Datos:')
-        print(caption)
-        print(user)
-        
         if not image: 
             image = None
-            print("No había imágen")
 
         new_post = Post.objects.create(user=profile, image=image, caption=caption)
         new_post.save()
-        print("Ya se guardó")
-
-
         return redirect('home')
 
-    
     return redirect('home')
+
+
+@login_required(login_url='signin')
+def profile_view(request, pk):
+    user_object = User.objects.get(username=pk)
+    user_profile = Profile.objects.get(user=user_object)
+    user_posts = Post.objects.filter(user=pk)
+    user_post_length = len(user_posts)
+
+    follower = request.user.username
+    user = pk
+
+    if FollowersCount.objects.filter(follower=follower, user=user).first():
+        button_text = 'Unfollow'
+    else:
+        button_text = 'Follow'
+
+    user_followers = len(FollowersCount.objects.filter(user=pk))
+    user_following = len(FollowersCount.objects.filter(follower=pk))
+
+    context = {
+        'user_object': user_object,
+        'user_profile': user_profile,
+        'user_posts': user_posts,
+        'user_post_length': user_post_length,
+        'button_text': button_text,
+        'user_followers': user_followers,
+        'user_following': user_following,
+    }
+    return render(request, 'profile.html', context)
 
 
 

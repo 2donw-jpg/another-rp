@@ -97,7 +97,7 @@
                             <div class="media">
                                 <img src="{{ post.user.profile_image.url }}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
                                 <div class="media-body">
-                                    <h5 class="mt-0">{{ post.user }}</h5>
+                                    <h5 class="mt-0">{{ post.user.user.full_name }}</h5>
                                     <h6>@{{ post.user }}</h6>
                                     {% if post.image %}
                                         <img src="{{ post.image.url }}" alt="Post Image" width="100%" class="mb-3">
