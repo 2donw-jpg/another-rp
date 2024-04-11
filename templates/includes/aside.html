@@ -1,21 +1,30 @@
-
 <aside class="col-md-3">
     <div class="left-column">
 
         {% block content %}
         <div class="card card-left1 mb-4">
             <div class="card-body text-center">
-                <img src="{{ profile.profile_image.url }}" alt="profile image" class="img-fluid rounded-circle" width="124px" height="124px">
+                <!-- Profile Image -->
+                <div class="d-flex justify-content-center mb-3">
+                    <img src="{{ profile.profile_image.url }}" alt="profile image" class="rounded-circle" width="124px" height="124px" style="object-fit: cover;">
+                </div>
+
+                <!-- Username -->
                 <h5 class="card-title">@{{ profile.user.username }}</h5>
+
+                <!-- Bio -->
                 <p class="card-text text-justify mb-2">{{ profile.bio }}</p>
+
+                <!-- Followers and Following Count -->
                 <ul class="list-unstyled nav justify-content-center">
-                    <li class="nav-item">
+                    <li class="nav-item me-3 mb-2">
                         <a href="#" class="text-dark text-decoration-none">Followers<br><strong>{{ followers_count }}</strong></a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item mb-2">
                         <a href="#" class="text-dark text-decoration-none">Following<br><strong>{{ following_count }}</strong></a>
                     </li>
                 </ul>
+                
             </div>
         </div>
         {% endblock %}
