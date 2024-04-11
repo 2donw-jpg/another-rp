@@ -29,26 +29,21 @@ class Post(models.Model):
         return self.user
 
 
-
-
-
 class LikePost(models.Model):
-    post_id = models.CharField(max_length=500)
-    username = models.CharField(max_length=100)
+    post_id = models.ForeignKey(Profile, related_name='post_liked', on_delete=models.CASCADE)
+    username = models.ForeignKey(Profile, related_name='user_like', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.username
 
 class FollowersCount(models.Model):
-    follower = models.CharField(max_length=100)
-    user = models.CharField(max_length=100)
+    follower = models.ForeignKey(Profile, related_name='following', on_delete=models.CASCADE)
+    followed_user = models.ForeignKey(Profile, related_name='followers', on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.user
     
 
 class Notification(models.Model):
-    user = models.CharField(max_length=100)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
 
     
