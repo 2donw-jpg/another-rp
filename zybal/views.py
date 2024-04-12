@@ -265,3 +265,24 @@ def serve_image(request, image_path):
         content_type = 'application/octet-stream'
     return FileResponse(open(image_full_path, 'rb'), content_type=content_type)
 
+@login_required(login_url='signin')
+def like_post_view(request):
+    username = request.user.username
+    post_id = request.GET.get('post_id')
+
+    post = Post.objects.get(id=post_id)
+    like_filter = LikePost.objects.filter(post_id=post_id, username=username).first()
+
+    if like_filter == None:
+        new_like = LikePost.objects.create(post_id=post_id, username=username)
+        new_like.save()
+        post.no_of_likes = post.no_of_likes + 1
+        post.save()
+        return redirect('home')
+    else:
+        like_filter.delete()
+        post.no_of_likes = post.no_of_likes - 1
+        post.save()
+        return redirect('home')
+
+

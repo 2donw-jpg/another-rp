@@ -38,6 +38,10 @@
             padding: 8px 20px;
             font-weight: bold;
         }
+
+        .image-link a {
+            outline: none;
+        }
     </style>
     
 </head>
@@ -101,7 +105,25 @@
                                     <h6>@{{ post.user }}</h6>
                                     {% if post.image %}
                                         <img src="{{ post.image.url }}" alt="Post Image" width="100%" class="mb-3">
-                                    {% endif %}                                    
+                                        {% endif %}
+                                        <div class="image-link" style="display: inline-block;">
+                                            <a href="/like-post?post_id={{ post.id}}">
+                                                {% if post.no_of_likes == 0 %}
+                                                    <img src="../../static/assets/images/corazon.png" alt="dislike">
+                                                {% else %}
+                                                    <img src="../../static/assets/images/like.png" alt="like">
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                        <div style="display: inline-block; padding-left: 1%;">
+                                            {% if post.no_of_likes == 0 %}
+                                                <p>No likes</p>
+                                            {% elif post.no_of_likes == 1 %}
+                                                <p>Like by {{post.no_of_likes}} person</p>
+                                            {% else %}
+                                                <p>Like by {{post.no_of_likes}} person</p>
+                                            {% endif %}
+                                        </div>                                                                  
                                     <p class="card-text text-justify">{{ post.caption }}</p>
                                     <hr>
                                 </div>
