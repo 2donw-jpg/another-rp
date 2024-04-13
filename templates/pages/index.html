@@ -108,7 +108,7 @@
                                         {% endif %}
                                         <div class="image-link" style="display: inline-block;">
                                             <a href="/like-post?post_id={{ post.id}}">
-                                                {% if post.no_of_likes == 0 %}
+                                                {% if post.user_has_liked == 0 %}
                                                     <img src="../../static/assets/images/corazon.png" alt="dislike">
                                                 {% else %}
                                                     <img src="../../static/assets/images/like.png" alt="like">
@@ -116,12 +116,12 @@
                                             </a>
                                         </div>
                                         <div style="display: inline-block; padding-left: 1%;">
-                                            {% if post.no_of_likes == 0 %}
+                                            {% if post.likes_count == 0 %}
                                                 <p>No likes</p>
-                                            {% elif post.no_of_likes == 1 %}
-                                                <p>Like by {{post.no_of_likes}} person</p>
+                                            {% elif post.likes_count == 1 %}
+                                                <p>Like by {{post.likes_count}} person</p>
                                             {% else %}
-                                                <p>Like by {{post.no_of_likes}} person</p>
+                                                <p>Like by {{post.likes_count}} persons</p>
                                             {% endif %}
                                         </div>                                                                  
                                     <p class="card-text text-justify">{{ post.caption }}</p>

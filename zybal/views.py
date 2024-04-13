@@ -148,6 +148,8 @@ def home_view(request):
     followers_count = len(FollowersCount.objects.filter(follower_id=profile))
     following_count = len(FollowersCount.objects.filter(followed_user=profile))
     posts = Post.objects.all().order_by('-created_at')
+    for post in posts:
+        post.user_has_liked = post.user_has_liked(profile)
 
     context = {
         'profile': profile,
@@ -267,22 +269,19 @@ def serve_image(request, image_path):
 
 @login_required(login_url='signin')
 def like_post_view(request):
-    username = request.user.username
+    user = request.user
+    profile = Profile.objects.get(user=user)
     post_id = request.GET.get('post_id')
 
     post = Post.objects.get(id=post_id)
-    like_filter = LikePost.objects.filter(post_id=post_id, username=username).first()
+    like_filter = LikePost.objects.filter(post_id=post_id, username=profile).first()
 
     if like_filter == None:
-        new_like = LikePost.objects.create(post_id=post_id, username=username)
+        new_like = LikePost.objects.create(post_id=post_id, username=profile)
         new_like.save()
-        post.no_of_likes = post.no_of_likes + 1
-        post.save()
         return redirect('home')
     else:
         like_filter.delete()
-        post.no_of_likes = post.no_of_likes - 1
-        post.save()
         return redirect('home')
 
 
