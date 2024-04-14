@@ -10,6 +10,7 @@ urlpatterns = [
     path('', home_view, name='home'),
     path('home/settings/', settings_view, name='settings'),
     path('upload', upload_view, name='upload'),
-    path('profile/<str:pk>', profile_view, name='profile'),
+    path('profile/', profile_view, name='profile'),
+    path('profile/<str:pk>/', profile_view, name='profile_detail'),
     path('like-post', like_post_view, name='like-post'),
 ]

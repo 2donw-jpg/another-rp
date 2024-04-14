@@ -153,5 +153,63 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".image-link a").click(function(e) {
+                e.preventDefault();
+                var url = $(this).attr("href");
+                var postId = url.split("=")[1]; 
+    
+                // Almacenar el contexto de 'this' en una variable
+                var self = this;
+    
+                // Obtener el token CSRF de las cookies
+                var csrftoken = getCookie('csrftoken');
+    
+                // Función para obtener el valor del token CSRF de las cookies
+                function getCookie(name) {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = cookies[i].trim();
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+    
+                // Realizar la solicitud AJAX con el token CSRF incluido
+                $.ajax({
+                    type: "POST",
+                    url: "/like-post?post_id=" + postId,
+                    beforeSend: function(xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    },
+                    success: function(data) {
+                        // Encuentra la imagen dentro del enlace actual
+                        var img = $(self).find("img");
+                        if (img.length > 0) {
+                            var currentSrc = img.attr("src");
+                            if (currentSrc.includes("like.png")) {
+                                img.attr("src", "../../static/assets/images/corazon.png");
+                            } else {
+                                img.attr("src", "../../static/assets/images/like.png");
+                            }
+                        } else {
+                            console.error("No se pudo encontrar la imagen dentro del enlace.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", status, error);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
