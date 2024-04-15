@@ -106,6 +106,7 @@
                                     {% if post.image %}
                                         <img src="{{ post.image.url }}" alt="Post Image" width="100%" class="mb-3">
                                         {% endif %}
+                                        <p class="card-text text-justify">{{ post.caption }}</p>
                                         <div class="image-link" style="display: inline-block;">
                                             <a href="/like-post?post_id={{ post.id}}">
                                                 {% if post.user_has_liked == 0 %}
@@ -115,16 +116,9 @@
                                                 {% endif %}
                                             </a>
                                         </div>
-                                        <div style="display: inline-block; padding-left: 1%;">
-                                            {% if post.likes_count == 0 %}
-                                                <p>No likes</p>
-                                            {% elif post.likes_count == 1 %}
-                                                <p>Like by {{post.likes_count}} person</p>
-                                            {% else %}
-                                                <p>Like by {{post.likes_count}} persons</p>
-                                            {% endif %}
-                                        </div>                                                                  
-                                    <p class="card-text text-justify">{{ post.caption }}</p>
+                                        <div id="likes-count-{{post.id}}" style="display: inline-block; padding-left: 1%;">
+                                                <p>{{post.likes_count}}</p>
+                                        </div>
                                     <hr>
                                 </div>
                                 <small>{{ post.created_at }}</small>
@@ -197,8 +191,12 @@
                             var currentSrc = img.attr("src");
                             if (currentSrc.includes("like.png")) {
                                 img.attr("src", "../../static/assets/images/corazon.png");
+                                var likesCount = parseInt($("#likes-count-" + postId + " p").text());
+                                $("#likes-count-" + postId + " p").text(likesCount - 1);
                             } else {
                                 img.attr("src", "../../static/assets/images/like.png");
+                                var likesCount = parseInt($("#likes-count-" + postId + " p").text());
+                                $("#likes-count-" + postId + " p").text(likesCount + 1);
                             }
                         } else {
                             console.error("No se pudo encontrar la imagen dentro del enlace.");
