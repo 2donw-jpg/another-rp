@@ -19,9 +19,9 @@
 
     <div class="collapse navbar-collapse" id="responsive">
         <ul class="navbar-nav mr-auto text-capitalize">
-            <li class="nav-item"><a href="" class="nav-link active">Inicio</a></li>
-            <li class="nav-item"><a href="profile/" class="nav-link">Perfil</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Actividad</a></li>
+            <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active">Inicio</a></li>
+            <li class="nav-item"><a href="{% url 'profile' %}" class="nav-link">Perfil</a></li>
+            <li class="nav-item"><a href="{% url 'activity' %}" class="nav-link">Actividad</a></li>
         </ul>
 
         <form action="" class="form-inline ml-auto d-none d-md-block mr-3" >

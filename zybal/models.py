@@ -12,8 +12,16 @@ class Profile(models.Model): #User Profile
     bio = models.TextField(blank=True)
     profile_image = models.ImageField(upload_to='profile_images', default="default_profile_image.jpg")
 
+
     def __str__(self):
         return self.user.username
+    
+    @property
+    def followers_count(self):
+        return FollowersCount.objects.filter(follower=self).count()
+    @property
+    def following_count(self):
+        return FollowersCount.objects.filter(followed_user=self).count()
 
 
 class Post(models.Model):
