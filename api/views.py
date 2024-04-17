@@ -34,18 +34,21 @@ class PostListAPIView(ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostMainSerializer
     pagination_class = PageNumberPagination  
+    paginator = PageNumberPagination()
+    paginator.page_size = 2 
 
 class PostAPIView(APIView):    
-    def get(self, request, post_id):
+    def get(self, request, post_id): 
         post = get_object_or_404(Post, id=post_id)
         serializer = PostMainSerializer(post)
         return Response(serializer.data)
 
 class NotificationAPIView(APIView):
     def get(self, request, username):
-        notifications = Notification.objects.filter(user__user__username=username)
         paginator = PageNumberPagination()
         paginator.page_size = 2  
+
+        notifications = Notification.objects.filter(user__user__username=username)
         result_page = paginator.paginate_queryset(notifications, request)
         serializer = NotificationSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)

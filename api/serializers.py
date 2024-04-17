@@ -1,6 +1,16 @@
 from rest_framework import serializers
 from zybal.models import Profile, Post, Notification, FollowersCount
-
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['id','image','caption','created_at', 'likes_count']       
+class ProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    first_name = serializers.CharField(source='user.first_name', read_only=True)
+    last_name = serializers.CharField(source='user.last_name', read_only=True)
+    class Meta:
+        model = Profile
+        fields = ['user', 'username', 'first_name', 'last_name', 'profile_image']
 class ProfileMainSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     first_name = serializers.CharField(source='user.first_name', read_only=True)
@@ -17,24 +27,6 @@ class ProfileMainSerializer(serializers.ModelSerializer):
         posts = obj.post_set.all()  # Access posts using related manager
         serializer = PostSerializer(posts, many=True)
         return serializer.data
-
-
-
-
-
-class PostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Post
-        fields = ['id','image','caption','created_at', 'likes_count']
-
-class ProfileSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(source='user.username', read_only=True)
-    first_name = serializers.CharField(source='user.first_name', read_only=True)
-    last_name = serializers.CharField(source='user.last_name', read_only=True)
-    class Meta:
-        model = Profile
-        fields = ['user', 'username', 'first_name', 'last_name', 'profile_image']
-
 class PostMainSerializer(serializers.ModelSerializer):
 
     user = ProfileSerializer()
