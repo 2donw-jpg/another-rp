@@ -1,45 +1,65 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Sign In | Zybal</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <!-- Importing Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="icon" href="../../static/assets/images/favicon.ico" type="image/x-icon">
-</head>
-<body class="dark">
-<div class="flex justify-center items-center h-screen bg-gray-200">
-    <div class="w-full max-w-xs">
-        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <form method="post" class="text-center">
-                {% csrf_token %}
-                <div class="mb-4">
-                    <i class="feather icon-unlock auth-icon text-4xl mb-4"></i>
+{% include 'includes/head.html' %}
+<body class="dark" style="background-color: #EEEEEE;">
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="text-center mb-4">
+                            <i class="feather icon-unlock auth-icon text-4xl mb-4"></i>
+                            <h3>Iniciar Sesión</h3>
+                        </div>
+                        {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        <div class="form-group">
+                            <input type="text" name="username" class="form-control" placeholder="Usuario" autocapitalize="none" autocomplete="username" maxlength="50" required="" id="id_username">
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="password" name="password" class="form-control" placeholder="Contraseña" required="" id="id_password">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <img id="passwordIcon" src="../../media/SVG/ojo-cruzado.svg" alt="Mostrar Contraseña" width="20px" height="20px">
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block">Iniciar Sesión</button>
+                        <p class="text-xs text-gray-500 mt-3 mb-0">Olvidó su contraseña? <a href="{% url 'password_reset' %}" class="text-success">Reiniciar contraseña</a></p>
+                        <p class="text-xs text-gray-500 mb-0">No tienes una cuenta? <a href="{% url 'sign_up' %}" class="text-success">Regístrate</a></p>
+                    </form>
                 </div>
-                <h3 class="mb-4">Login</h3>
-                <div class="mb-4">
-                    <input type="text" name="username" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Username" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
-                </div>
-                <div class="mb-6">
-                    <input type="password" name="password" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Password" required="" id="id_password">
-                </div>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">Login</button>
-               
-
-                <p class="text-xs text-gray-500">Forgot password? <a href="/accounts/password-reset/" class="text-blue-500">Reset</a></p>
-                <p class="text-xs text-gray-500">Don’t have an account? <a href="/accounts/register/" class="text-blue-500">Signup</a></p>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
-<label class="hidden">
-    <i class="icon feather icon-sun" id="theme-indicator"></i>
-    <input type="checkbox" id="theme-switch" class="hidden">
-</label>
+<!-- Importing Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
+<script>
+    $(document).ready(function() {
+        $("#togglePassword").click(function() {
+            var passwordField = $("#id_password");
+            var passwordFieldType = passwordField.attr("type");
+            if (passwordFieldType === "password") {
+                passwordField.attr("type", "text");
+                $("#passwordIcon").attr("src", "../../media/SVG/ojo.svg");
+            } else {
+                passwordField.attr("type", "password");
+                $("#passwordIcon").attr("src", "../../media/SVG/ojo-cruzado.svg");
+            }
+        });
+    });
+</script>
 </body>
 </html>
