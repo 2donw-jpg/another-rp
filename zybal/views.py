@@ -33,7 +33,7 @@ def sign_up_view(request):
                 return redirect('sign_up')
             else:
                 user = User.objects.create_user(username=username, email=email, password=password)
-                new_profile = Profile.objects.create(user=user, id_user=user.pk)
+                Profile.objects.create(user=user, id=user.pk)
                 login(request, user)
                 return redirect('settings')
         else:
@@ -126,8 +126,10 @@ def settings_view(request):
         if 'image' in request.FILES:
             profile.profile_image = request.FILES.get('image')
         
-        profile.user.first_name = request.POST.get('first_name', user.first_name)
-        profile.user.last_name = request.POST.get('last_name', user.last_name)
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.last_name = request.POST.get('last_name', user.last_name)
+        user.save();
+        
         profile.bio = request.POST.get('bio', profile.bio)
         profile.phone_number = request.POST.get('phone_number', profile.phone_number)
         profile.save()

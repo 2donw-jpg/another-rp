@@ -20,13 +20,13 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ['id_user','username', 'first_name','last_name','phone_number','bio','profile_image','email', 'date_joined','posts' ]
+        fields = ['user_id','username', 'first_name','last_name','phone_number','bio','profile_image','email', 'date_joined','posts' ]
 
 class PostSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Post
-        fields = ['id','image','caption','created_at','no_of_likes' ]
+        fields = ['id','image','caption','created_at']
 
 class NotificationSerializer(serializers.ModelSerializer):
     
