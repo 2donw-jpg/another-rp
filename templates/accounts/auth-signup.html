@@ -1,54 +1,58 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Sign Up | Zybal</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <!-- Importing Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="icon" href="../../static/assets/images/favicon.ico" type="image/x-icon">
-</head>
-<body class="dark">
-<div class="flex justify-center items-center h-screen bg-gray-200">
-    <div class="w-full max-w-xs">
-        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <form method="post" class="text-center">
-                {% csrf_token %}
-                <div class="mb-4">
-                    <i class="feather icon-user-plus auth-icon text-4xl mb-4"></i>
+{% include 'includes/head.html' %}
+<body class="dark"  style="background-color: #EEEEEE;">
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" class="text-center">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <i class="feather icon-user-plus auth-icon text-4xl mb-4"></i>
+                        </div>
+                        <h3 class="mb-4">Regístrate</h3>
+                        {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        <div class="mb-4">
+                            <input type="text" name="username" class="form-control mb-3" placeholder="Usuario" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
+                        </div>
+                        <div class="mb-4">
+                            <input type="email" name="email" class="form-control mb-3" placeholder="Correo electrónico" autocapitalize="none" autocomplete="email" maxlength="254" required="" id="id_email">
+                        </div>
+                        <div class="mb-6">
+                            <input type="password" name="password1" class="form-control mb-3" placeholder="Contraseña" required="" id="id_password1">
+                        </div>
+                        <div class="mb-6">
+                            <input type="password" name="password2" class="form-control" placeholder="Confirmar Contraseña" required="" id="id_password2">
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block mt-3">Registrarse</button>
+                        <p class="text-xs text-gray-500 mt-3">Ya tienes una cuenta? <a href="{% url 'sign_in' %}" class="text-success">Inicia Sesión</a></p>
+                    </form>
                 </div>
-                <h3 class="mb-4">Sign Up</h3>
-                <div class="mb-4">
-                    <input type="text" name="username" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Username" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
-                </div>
-                <div class="mb-4">
-                    <input type="email" name="email" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Email" autocapitalize="none" autocomplete="email" maxlength="254" required="" id="id_email">
-                </div>
-                <div class="mb-6">
-                    <input type="password" name="password1" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Password" required="" id="id_password1">
-                </div>
-                <div class="mb-6">
-                    <input type="password" name="password2" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Confirm Password" required="" id="id_password2">
-                </div>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">Sign Up</button>
-                <p class="text-xs text-gray-500">Already have an account? <a href="/accounts/login/" class="text-blue-500">Login</a></p>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
-<label class="hidden">
-    <i class="icon feather icon-sun" id="theme-indicator"></i>
-    <input type="checkbox" id="theme-switch" class="hidden">
-</label>
+<!-- Importing Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-<!-- Required Js -->
-<script src="{% static 'assets/js/vendor-all.min.js' %}"></script>
-<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'assets/js/pcoded.min.js' %}"></script>
-<script src="{% static 'assets/js/dark-mode.js' %}"></script>
-
+<!-- Script to show the toast message -->
+{% if messages %}
+<script>
+    $(document).ready(function(){
+        $('#loginInfoToast').toast('show');
+    });
+</script>
+{% endif %}
 </body>
 </html>
