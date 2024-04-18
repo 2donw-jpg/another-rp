@@ -14,22 +14,22 @@ import random
 import string
 
 
-#TODO When successfully sign up send it to settings
+#TODO: DONE
 def sign_up_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password1']  # We use doble password for validation
-        password2 = request.POST['password2']  
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password1')
+        password2 = request.POST.get('password2')  
 
         if password == password2:
             if User.objects.filter(email=email).exists():
-                # Make a notification that the email is already taken
-                messages.info(request, 'Email already used')
+
+                messages.info(request, 'Correo electrónico ya existe')
                 return redirect('sign_up')
             elif User.objects.filter(username=username).exists():
-                # Make a notification that the username is already taken
-                messages.info(request, 'Username already used') 
+
+                messages.info(request, 'Usuario ya existe') 
                 return redirect('sign_up')
             else:
                 user = User.objects.create_user(username=username, email=email, password=password)
@@ -37,7 +37,7 @@ def sign_up_view(request):
                 login(request, user)
                 return redirect('settings')
         else:
-            messages.info(request, 'Passwords do not match')
+            messages.info(request, 'Contraseñas no coinciden')
             return redirect('sign_up')
 
     return render(request, 'accounts/auth-signup.html')
@@ -48,18 +48,19 @@ def sign_up_view(request):
 
 
 
-#TODO Notify user when failed login
+#TODO: DONE
 def sign_in_view(request):
+
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         user = authenticate(username=username, password=password)
 
         if user is not None:
             login(request, user)
             return redirect('home')
         else:
-            messages.info(request, 'User and/or Password incorrect')
+            messages.info(request, 'Usuario y/o contraseña incorrecta')
             return redirect('sign_in')
     else:
         return render(request, 'accounts/auth-signin.html')
@@ -226,28 +227,41 @@ def upload_view(request):
 
     return redirect('home')
 
-
 @login_required(login_url='signin')
-def profile_view(request):
+def profile_view(request,username):
     profile = Profile.objects.get(user=request.user)
-    # Obtener el número de seguidores y siguiendo (puedes implementar lógica real aquí)
-    followers_count = len(FollowersCount.objects.filter(follower_id=profile))
-    following_count = len(FollowersCount.objects.filter(followed_user=profile))
-    posts = Post.objects.all().order_by('-created_at')
+    profile_searched = Profile.objects.get(user__username=username)
+    posts = Post.objects.filter(user__user__username = username).order_by('-created_at')
     for post in posts:
         post.user_has_liked = post.user_has_liked(profile)
 
     context = {
         'profile': profile,
-        'followers_count': followers_count,
-        'following_count': following_count,
         'posts': posts,
+        'profile_searched':profile_searched,
     }
 
     return render(request, 'pages/profile.html', context)
 
+@login_required(login_url='signin')
+def follow_user_view(request, username):
+    if request.method == 'POST':
+        print("1")
+        user = request.user
+        profile = Profile.objects.get(user=user)
+        profile_searched = Profile.objects.get(user__username=username)
 
+        is_follower = FollowersCount.objects.filter(follower=profile, followed_user=profile_searched).first()
+        print("2")
 
+        if is_follower == None:
+            follower_created = FollowersCount.objects.create(follower=profile, followed_user=profile_searched)
+            follower_created.save()
+            print("3")
+            return redirect('profile', username=username)
+        else:
+            is_follower.delete()
+            return redirect('profile', username=username)
 
 
 def serve_image(request, image_path):
@@ -275,3 +289,19 @@ def like_post_view(request):
         return redirect('home')
 
 
+def activity_view(request):
+    profile = Profile.objects.get(user=request.user)
+    # Obtener el número de seguidores y siguiendo (puedes implementar lógica real aquí)
+    followers_count = len(FollowersCount.objects.filter(follower_id=profile))
+    following_count = len(FollowersCount.objects.filter(followed_user=profile))
+    posts = Post.objects.all().order_by('-created_at')
+    for post in posts:
+        post.user_has_liked = post.user_has_liked(profile)
+
+    context = {
+        'profile': profile,
+        'followers_count': followers_count,
+        'following_count': following_count,
+        'posts': posts,
+    }
+    return render(request, 'pages/activity.html', context)

@@ -3,10 +3,10 @@ from api.views import ProfileAPIView, ProfileListAPIView, PostListAPIView, PostA
 
 urlpatterns = [
     path('users/', ProfileListAPIView.as_view(), name='profiles'),
-    path('users/<int:user_id>/', ProfileAPIView.as_view(), name='profile_detail'),
+    path('users/<slug:username>/', ProfileAPIView.as_view(), name='profile_detail'),
 
     path('posts/', PostListAPIView.as_view(), name='posts'),
     path('posts/<slug:post_id>/', PostAPIView.as_view(), name='post_detail'),
 
-    path('notify/<int:user>/', NotificationAPIView.as_view(), name='notify_detail'),
+    path('notify/<slug:username>/', NotificationAPIView.as_view(), name='notify_detail'),
 ]

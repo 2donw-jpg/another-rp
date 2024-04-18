@@ -2,39 +2,28 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 from zybal.models import Profile, Post, Notification
-from api.serializers import ProfileSerializer, PostSerializer, NotificationSerializer
+from api.serializers import ProfileMainSerializer, PostMainSerializer, NotificationSerializer
 from dev import settings
 import os
 
 class ProfileListAPIView(ListAPIView):
     queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+    serializer_class = ProfileMainSerializer
+    pagination_class = PageNumberPagination  
 
 class ProfileAPIView(APIView):
     
-    """def get(self, request, id_user):
-        try:
-            profile = Profile.objects.get(user__id=id_user)
-            profile_serializer = ProfileSerializer(profile)
-            posts = Post.objects.filter(user__id=id_user)
-            post_serializer = PostSerializer(posts, many=True)
-            return Response({
-                "profile": profile_serializer.data,
-                "posts": post_serializer.data
-            })
-        except Profile.DoesNotExist:
-            return Response({"error": "Profile does not exist"}, status=status.HTTP_404_NOT_FOUND)"""
-    
-    def get(self, request, id_user):
-        profile = get_object_or_404(Profile, user__id=id_user)
-        serializer = ProfileSerializer(profile)
+    def get(self, request, username):
+        profile = get_object_or_404(Profile, user__username=username)
+        serializer = ProfileMainSerializer(profile)
         return Response(serializer.data)      
 
-    def put(self, request, user_id):
-        profile = get_object_or_404(Profile, user__id=user_id)
-        serializer = ProfileSerializer(profile, data=request.data)
+    def put(self, request, username):
+        profile = get_object_or_404(Profile, user__username=username)
+        serializer = ProfileMainSerializer(profile, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -43,16 +32,23 @@ class ProfileAPIView(APIView):
 
 class PostListAPIView(ListAPIView):
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    serializer_class = PostMainSerializer
+    pagination_class = PageNumberPagination  
+    paginator = PageNumberPagination()
+    paginator.page_size = 2 
 
 class PostAPIView(APIView):    
-    def get(self, request, post_id):
+    def get(self, request, post_id): 
         post = get_object_or_404(Post, id=post_id)
-        serializer = PostSerializer(post)
+        serializer = PostMainSerializer(post)
         return Response(serializer.data)
 
 class NotificationAPIView(APIView):
-    def get(self, request, user):
-        notification = get_object_or_404(Notification, user=user)
-        serializer = NotificationSerializer(notification)
-        return Response(serializer.data)
+    def get(self, request, username):
+        paginator = PageNumberPagination()
+        paginator.page_size = 2  
+
+        notifications = Notification.objects.filter(user__user__username=username)
+        result_page = paginator.paginate_queryset(notifications, request)
+        serializer = NotificationSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)

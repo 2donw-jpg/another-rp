@@ -19,9 +19,9 @@
 
     <div class="collapse navbar-collapse" id="responsive">
         <ul class="navbar-nav mr-auto text-capitalize">
-            <li class="nav-item"><a href="" class="nav-link active">Inicio</a></li>
-            <li class="nav-item"><a href="profile/" class="nav-link">Perfil</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Actividad</a></li>
+            <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active">Inicio</a></li>
+            <li class="nav-item"><a href="{% url 'profile' request.user.username %}" class="nav-link">Perfil</a></li>
+            <li class="nav-item"><a href="{% url 'activity' %}" class="nav-link">Actividad</a></li>
         </ul>
 
         <form action="" class="form-inline ml-auto d-none d-md-block mr-3" >
@@ -42,15 +42,15 @@
 
 
 
-    
+    <!--TODO: Fix the user image-->
     <div class="dropdown mr-3">
         <button class="btn btn-secondary p-0 border-0 bg-transparent" type="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img id="profileImage" src="{{ profile.profile_image.url }}" alt="profile_icon" class="rounded-circle" width="50px" height="50px">
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
-            <a class="dropdown-item" href="home/settings/">Configuraciones</a>
-            <a class="dropdown-item" href="#">Preferencias de Idioma</a>
-            <a class="dropdown-item" href="accounts/logout/">Cerrar Sesión</a>
+            <a class="dropdown-item" href="{% url 'settings' %}">Configuraciones</a>
+
+            <a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesión</a>
         </div>
     </div>
 </nav>
