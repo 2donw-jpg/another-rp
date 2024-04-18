@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zybal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lightbox.min.css">
+    <style>
+        .card {
+            background-color: transparent;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%; /* Ensures the card fills the container */
+        }
+
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column; /* Set the flex direction to column */
+            height: 100%; /* Ensure the card body fills the container vertically */
+        }
+
+        .form-control {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1; /* Allow textarea to grow and fill remaining space */
+            resize: none; /* Prevent resizing of the textarea */
+            min-height: 100%; /* Ensure the textarea fills the entire card-body vertically */
+        }
+
+        .btn {
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: bold;
+        }
+
+        .image-link a {
+            outline: none;
+        }
+    </style>
+    
+</head>
+<body>
+    <!-- Navigation Bar -->
+    {% include 'includes/nav-bar.html' %}
+    <!-- Notification Preview -->
+    <div class="container">
+        <div class="row">
+            <!-- Aside -->
+            {% include 'includes/aside.html' %}
+            <div class="col-md-9">
+                <!-- Tweet Form -->
+                <div class="middle-column">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                {% for post in posts %}
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="media">
+                                                <img src="{{ post.user.profile_image.url }}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
+                                                <div class="media-body">
+                                                    <h6><a href="#">@{{ post.user }}</a> le ha dado like a tu foto</h6>
+                                                    <small>{{ post.created_at }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Lightbox Options -->
+    <script src="lightbox-plus-jquery.min.js"></script>
+    <!-- Bootstrap and jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -19,12 +19,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 from zybal.views import serve_image
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('zybal.urls')),
     path('api/', include('api.urls')),
     path('media/<path:image_path>/', serve_image, name='serve_image'),
+    path('', RedirectView.as_view(url='/404/')),
+    path('<path:unknown>/', RedirectView.as_view(url='/404/'))
 ]
 
 urlpatters = urlpatterns+static(settings.MEDIA_URL, 
