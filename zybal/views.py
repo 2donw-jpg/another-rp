@@ -227,47 +227,41 @@ def upload_view(request):
 
     return redirect('home')
 
-
-@login_required(login_url='signin')
-def profile_view(request):
-    profile = Profile.objects.get(user=request.user)
-    # Obtener el número de seguidores y siguiendo (puedes implementar lógica real aquí)
-    followers_count = len(FollowersCount.objects.filter(follower_id=profile))
-    following_count = len(FollowersCount.objects.filter(followed_user=profile))
-    posts = Post.objects.all().order_by('-created_at')
-    for post in posts:
-        post.user_has_liked = post.user_has_liked(profile)
-
-    context = {
-        'profile': profile,
-        'followers_count': followers_count,
-        'following_count': following_count,
-        'posts': posts,
-    }
-
-    return render(request, 'pages/profile.html', context)
-
 @login_required(login_url='signin')
 def profile_view(request,username):
-    profile = Profile.objects.get(user__username=username)
-    # Obtener el número de seguidores y siguiendo (puedes implementar lógica real aquí)
-    followers_count = len(FollowersCount.objects.filter(follower_id=profile))
-    following_count = len(FollowersCount.objects.filter(followed_user=profile))
-    posts = Post.objects.all().order_by('-created_at')
+    profile = Profile.objects.get(user=request.user)
+    profile_searched = Profile.objects.get(user__username=username)
+    posts = Post.objects.filter(user__user__username = username).order_by('-created_at')
     for post in posts:
         post.user_has_liked = post.user_has_liked(profile)
 
     context = {
         'profile': profile,
-        'followers_count': followers_count,
-        'following_count': following_count,
         'posts': posts,
+        'profile_searched':profile_searched,
     }
 
     return render(request, 'pages/profile.html', context)
 
+@login_required(login_url='signin')
+def follow_user_view(request, username):
+    if request.method == 'POST':
+        print("1")
+        user = request.user
+        profile = Profile.objects.get(user=user)
+        profile_searched = Profile.objects.get(user__username=username)
 
+        is_follower = FollowersCount.objects.filter(follower=profile, followed_user=profile_searched).first()
+        print("2")
 
+        if is_follower == None:
+            follower_created = FollowersCount.objects.create(follower=profile, followed_user=profile_searched)
+            follower_created.save()
+            print("3")
+            return redirect('profile', username=username)
+        else:
+            is_follower.delete()
+            return redirect('profile', username=username)
 
 
 def serve_image(request, image_path):

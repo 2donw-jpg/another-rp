@@ -17,10 +17,6 @@
                                 border-bottom: 3px solid #00976d;
                                 padding-bottom: 60px;
                         }
-                        .contenedorPerfil img {
-                                border-radius: 50%;
-                                box-shadow: 0 0 10px 0 rgba(0,0,0,0.5);
-                        }
                         .textoPerfil{
                                 display: inline-block;
                                 vertical-align: top;
@@ -55,7 +51,11 @@
                                 position: relative;
                                 margin: 0 auto;
                                 margin-top: 15px;
-                                width: 57%;
+                                width: 49%;
+                        }
+                        .btn{
+                                display: flex;
+                                margin: 10px;
                         }                             
                 </style>
         </head>
@@ -64,20 +64,28 @@
                 {% include 'includes/nav-bar.html' %}
                         
                 <div class="contenedorPerfil">
-                   <img src="{{profile.profile_image.url}}" alt="Profile Picture" width="180px" height="180px" class="rounded-circle mr-3">
+                   <img src="{{profile_searched.profile_image.url}}" alt="Profile Picture" width="180px" height="180px" class="rounded-circle mr-3">
                    <div class="textoPerfil">
-                        <h5>{{profile.user.first_name}} {{profile.user.last_name}}</h5>
-                        <p>@{{profile.user}}</p>
+                        <h5>{{profile_searched.user.first_name}} {{profile_searched.user.last_name}}</h5>
+                        <p>@{{profile_searched.user}}</p>
                    </div>
                    <div class="textoSeguidores">
                         <div class="grupoSeguidores">
                                 <h5>Seguidores:</h5>
-                                <p>{{followers_count}}</p>
+                                <p>{{profile_searched.followers_count}}</p>
                         </div>
                         <div class="grupoSeguidos">
                                 <h5>Seguidos:</h5>
-                                <p>{{following_count}}</p>
+                                <p>{{profile_searched.following_count}}</p>
                         </div>
+                        {% if profile_searched != profile %}
+                        <div class="btn">
+                                <form action="{% url 'follow-user' profile_searched.user.username %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;">Seguir</button>
+                                </form>
+                        </div>
+                        {% endif %}
                    </div>     
                 </div>
                 <div class="post">

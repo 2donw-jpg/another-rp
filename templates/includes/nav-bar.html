@@ -20,7 +20,7 @@
     <div class="collapse navbar-collapse" id="responsive">
         <ul class="navbar-nav mr-auto text-capitalize">
             <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active">Inicio</a></li>
-            <li class="nav-item"><a href="{% url 'profile_detail' profile.user.username %}" class="nav-link">Perfil</a></li>
+            <li class="nav-item"><a href="{% url 'profile' request.user.username %}" class="nav-link">Perfil</a></li>
             <li class="nav-item"><a href="{% url 'activity' %}" class="nav-link">Actividad</a></li>
         </ul>
 

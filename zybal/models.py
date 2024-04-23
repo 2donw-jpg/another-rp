@@ -18,10 +18,10 @@ class Profile(models.Model): #User Profile
     
     @property
     def followers_count(self):
-        return FollowersCount.objects.filter(follower=self).count()
+        return FollowersCount.objects.filter(followed_user=self).count()
     @property
     def following_count(self):
-        return FollowersCount.objects.filter(followed_user=self).count()
+        return FollowersCount.objects.filter(follower=self).count()
 
 
 class Post(models.Model):
