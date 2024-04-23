@@ -165,7 +165,7 @@ def home_view(request):
 
 
 
-@login_required(login_url='signin')
+@login_required(login_url='sign_in')
 def follow(request):
     if request.method == 'POST':
         follower = request.POST['follower']
@@ -185,7 +185,7 @@ def follow(request):
 
 
 #TODO check this thing
-@login_required(login_url='signin')
+@login_required(login_url='sign_in')
 def search_view(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)
@@ -277,6 +277,8 @@ def serve_image(request, image_path):
         content_type = 'application/octet-stream'
     return FileResponse(open(image_full_path, 'rb'), content_type=content_type)
 
+    
+
 @login_required(login_url='signin')
 def like_post_view(request):
     user = request.user
@@ -293,6 +295,26 @@ def like_post_view(request):
     else:
         like_filter.delete()
         return redirect('home')
+
+
+
+
+@login_required(login_url='signin')
+def follow_user_view(request, username):
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    profile_searched = Profile.objects.get(user__username=username)
+
+    is_follower = FollowersCount.objects.filter(follower=profile, followed_user=profile_searched).first()
+
+    if is_follower == None:
+        follower_created = FollowersCount.objects.create(follower=profile, followed_user=profile_searched)
+        follower_created.save()
+        return redirect('profile', username=username)
+    else:
+        is_follower.delete()
+        return redirect('profile', username=username)
+
 
 
 def activity_view(request):
