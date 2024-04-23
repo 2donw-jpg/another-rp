@@ -24,26 +24,11 @@
             <li class="nav-item"><a href="{% url 'activity' %}" class="nav-link">Actividad</a></li>
         </ul>
 
-<<<<<<< HEAD
-        <div class="btn">
-            <form action="{% if search.value %}{% url 'search_user' search.value %}{% end if %}" method="post">
-                {% csrf_token %}
-                <input type="text" name="search" id="search" placeholder="Search" class="form-control form-control-sm">            </form>
-            </form>
-        </div>
-        
-
-
-        
-
-
-=======
         <search>
             <form method="post" action="{% url 'search_user'%}" class="form-inline ml-auto d-none d-md-block mr-3" >
                 <input type="text" name="search" id="search" placeholder="Buscar usuario" class="form-control form-control-sm">
             </form>
         </search>
->>>>>>> 1c4e86937ab64145e7f194be99c6d7ffc44fcb9a
 
 
     </div>

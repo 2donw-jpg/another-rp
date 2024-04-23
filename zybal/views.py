@@ -155,17 +155,12 @@ def follow(request):
 
 
 
-<<<<<<< HEAD
-@login_required(login_url='signin')
-def search_view(request, username):
-=======
 #TODO Make a search html page
 @login_required(login_url='sign_in')
 def search_view(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)
 
->>>>>>> 1c4e86937ab64145e7f194be99c6d7ffc44fcb9a
     if request.method == 'POST':
         return redirect('profile', username=username)
 
@@ -220,25 +215,6 @@ def profile_view(request,username):
 
     return render(request, 'pages/profile.html', context)
 
-<<<<<<< HEAD
-@login_required(login_url='signin')
-def follow_user_view(request, username):
-    if request.method == 'POST':
-        user = request.user
-        profile = Profile.objects.get(user=user)
-        profile_searched = Profile.objects.get(user__username=username)
-
-        is_follower = FollowersCount.objects.filter(follower=profile, followed_user=profile_searched).first()
-
-        if is_follower == None:
-            follower_created = FollowersCount.objects.create(follower=profile, followed_user=profile_searched)
-            follower_created.save()
-            return redirect('profile', username=username)
-        else:
-            is_follower.delete()
-            return redirect('profile', username=username)
-=======
->>>>>>> 1c4e86937ab64145e7f194be99c6d7ffc44fcb9a
 
 
 def serve_image(request, image_path):
