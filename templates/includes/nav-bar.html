@@ -24,9 +24,13 @@
             <li class="nav-item"><a href="{% url 'activity' %}" class="nav-link">Actividad</a></li>
         </ul>
 
-        <form action="" class="form-inline ml-auto d-none d-md-block mr-3" >
-            <input type="text" name="search" id="search" placeholder="Search" class="form-control form-control-sm">
-        </form>
+        <div class="btn">
+            <form action="{% if search.value %}{% url 'search_user' search.value %}{% end if %}" method="post">
+                {% csrf_token %}
+                <input type="text" name="search" id="search" placeholder="Search" class="form-control form-control-sm">            </form>
+            </form>
+        </div>
+        
 
 
         

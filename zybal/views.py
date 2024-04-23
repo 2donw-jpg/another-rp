@@ -184,28 +184,10 @@ def follow(request):
 
 
 
-#TODO check this thing
 @login_required(login_url='signin')
-def search_view(request):
-    user_object = User.objects.get(username=request.user.username)
-    user_profile = Profile.objects.get(user=user_object)
-
+def search_view(request, username):
     if request.method == 'POST':
-        username = request.POST['username']
-        username_object = User.objects.filter(username__icontains=username)
-
-        username_profile = []
-        username_profile_list = []
-
-        for users in username_object:
-            username_profile.append(users.id)
-
-        for ids in username_profile:
-            profile_lists = Profile.objects.filter(id_user=ids)
-            username_profile_list.append(profile_lists)
-        
-        username_profile_list = list(chain(*username_profile_list))
-    return render(request, 'search.html', {'user_profile': user_profile, 'username_profile_list': username_profile_list})
+        return redirect('profile', username=username)
 
 
 
@@ -246,18 +228,15 @@ def profile_view(request,username):
 @login_required(login_url='signin')
 def follow_user_view(request, username):
     if request.method == 'POST':
-        print("1")
         user = request.user
         profile = Profile.objects.get(user=user)
         profile_searched = Profile.objects.get(user__username=username)
 
         is_follower = FollowersCount.objects.filter(follower=profile, followed_user=profile_searched).first()
-        print("2")
 
         if is_follower == None:
             follower_created = FollowersCount.objects.create(follower=profile, followed_user=profile_searched)
             follower_created.save()
-            print("3")
             return redirect('profile', username=username)
         else:
             is_follower.delete()
