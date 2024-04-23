@@ -15,11 +15,4 @@ urlpatterns = [
     path('like-post', views.like_post, name='like-post'),
     path('follow-user/<str:username>', views.follow_user, name='follow-user'),
     path('activity/', views.activity_view, name='activity'),
-
-    
-
-    
-
-
-
 ]

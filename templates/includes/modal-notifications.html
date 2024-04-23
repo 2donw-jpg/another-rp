@@ -1,0 +1,54 @@
+<style>
+    .custom-modal-width {
+        max-width: 800px; /* Adjust the width as needed */
+    }
+    .card {
+        background-color: transparent;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        width: 100%; /* Ensures the card fills the container */
+    }
+    .card-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column; /* Set the flex direction to column */
+        height: 100%; /* Ensure the card body fills the container vertically */
+    }
+    .media {
+        margin-bottom: 10px; /* Adjust the margin as needed */
+    }
+</style>
+</head>
+<body>
+
+<div class="modal fade" id="modal-notifications">
+<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered custom-modal-width">
+    <div class="modal-content">
+        <div class="modal-header" style="background-color: #026842; color: #ffffff; text-align: center;">
+            <h4 class="modal-title">Notificaciones</h4>
+            <button type="button" class="close" data-dismiss="modal" style="color: #ffffff;">
+                &times;
+            </button>
+        </div>
+        <div class="modal-body">
+            {% for post in posts %}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="media">
+                            <img src="{{ post.user.profile_image.url }}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
+                            <div class="media-body">
+                                <h6><a href="#">@{{ post.user }}</a> le ha dado like a tu foto</h6>
+                                <small>{{ post.created_at }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>  
+    </div>
+</div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

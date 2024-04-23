@@ -186,7 +186,6 @@ def search_view(request):
 def search_user(request):
     if request.method == 'POST':
         username = request.POST.get('search')
-
         return redirect('profile', username)
 
 
@@ -209,9 +208,7 @@ def upload(request):
         new_post = Post.objects.create(user=profile, image=image, caption=caption)
         new_post.save()
         return redirect('home')
-
     return redirect('home')
-
 
 @login_required(login_url='signin')
 def profile_view(request,username):
