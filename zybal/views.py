@@ -119,17 +119,12 @@ def settings_view(request):
 @login_required(login_url='sign_in')
 def home_view(request):
     profile = Profile.objects.get(user=request.user)
-    # Obtener el número de seguidores y siguiendo (puedes implementar lógica real aquí)
-    followers_count = len(FollowersCount.objects.filter(follower_id=profile))
-    following_count = len(FollowersCount.objects.filter(followed_user=profile))
     posts = Post.objects.all().order_by('-created_at')
     for post in posts:
         post.user_has_liked = post.user_has_liked(profile)
 
     context = {
         'profile': profile,
-        'followers_count': followers_count,
-        'following_count': following_count,
         'posts': posts,
     }
     return render(request, 'pages/index.html', context)
