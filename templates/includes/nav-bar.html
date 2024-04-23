@@ -24,14 +24,11 @@
             <li class="nav-item"><a href="{% url 'activity' %}" class="nav-link">Actividad</a></li>
         </ul>
 
-        <form action="" class="form-inline ml-auto d-none d-md-block mr-3" >
-            <input type="text" name="search" id="search" placeholder="Search" class="form-control form-control-sm">
-        </form>
-
-
-        
-
-
+        <search>
+            <form method="post" action="{% url 'search_user'%}" class="form-inline ml-auto d-none d-md-block mr-3" >
+                <input type="text" name="search" id="search" placeholder="Buscar usuario" class="form-control form-control-sm">
+            </form>
+        </search>
 
 
     </div>
@@ -41,8 +38,6 @@
     </a>
 
 
-
-    <!--TODO: Fix the user image-->
     <div class="dropdown mr-3">
         <button class="btn btn-secondary p-0 border-0 bg-transparent" type="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img id="profileImage" src="{{ profile.profile_image.url }}" alt="profile_icon" class="rounded-circle" width="50px" height="50px">

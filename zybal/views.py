@@ -14,7 +14,6 @@ import random
 import string
 
 
-#TODO: DONE
 def sign_up_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -42,13 +41,6 @@ def sign_up_view(request):
 
     return render(request, 'accounts/auth-signup.html')
 
-
-
-
-
-
-
-#TODO: DONE
 def sign_in_view(request):
 
     if request.method == 'POST':
@@ -65,22 +57,13 @@ def sign_in_view(request):
     else:
         return render(request, 'accounts/auth-signin.html')
 
-
-
-
-
-
-#Sign Out
 @login_required(login_url='sign_in')
 def sign_out_view(request):
     logout(request)
     return redirect('sign_in')
 
 
-
-
-#TODO apply the SMTP and the verification method
-def password_reset_view(request):
+""" def password_reset_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         user = User.objects.get(email=email)  # Assuming you have a User model
@@ -91,7 +74,6 @@ def password_reset_view(request):
             return HttpResponse('No user found with that email address.')
     
     return render(request, 'accounts/auth-reset.html')
-"""
         # Generate a random token
         token = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
         
@@ -108,13 +90,7 @@ def password_reset_view(request):
         )
         
         return HttpResponse('Password reset email sent successfully.')
-"""
-
-
-
-
-
-
+ """
 
 
 @login_required(login_url='sign_in')
@@ -139,11 +115,7 @@ def settings_view(request):
 
     return render(request, 'pages/settings.html', {'profile': profile})
 
-
-
-    
-
-#TODO apply the followers/following values from the user
+#TODO: Only get the feed of users following
 @login_required(login_url='sign_in')
 def home_view(request):
     profile = Profile.objects.get(user=request.user)
@@ -163,8 +135,7 @@ def home_view(request):
     return render(request, 'pages/index.html', context)
 
 
-
-
+#TODO: Change the redirect dipshit
 @login_required(login_url='sign_in')
 def follow(request):
     if request.method == 'POST':
@@ -184,7 +155,7 @@ def follow(request):
 
 
 
-#TODO check this thing
+#TODO Make a search html page
 @login_required(login_url='sign_in')
 def search_view(request):
     user_object = User.objects.get(username=request.user.username)
@@ -210,8 +181,22 @@ def search_view(request):
 
 
 
+#TODO: It requieres to send an image as mandatory
 @login_required(login_url='signin')
-def upload_view(request):
+def search_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('search')
+
+        return redirect('profile', username)
+
+
+
+
+
+
+#TODO: It requieres to send an image as mandatory
+@login_required(login_url='signin')
+def upload(request):
     if request.method == 'POST':
         user = request.user.username
         profile = Profile.objects.get(user=request.user)
@@ -226,6 +211,7 @@ def upload_view(request):
         return redirect('home')
 
     return redirect('home')
+
 
 @login_required(login_url='signin')
 def profile_view(request,username):
@@ -243,25 +229,6 @@ def profile_view(request,username):
 
     return render(request, 'pages/profile.html', context)
 
-@login_required(login_url='signin')
-def follow_user_view(request, username):
-    if request.method == 'POST':
-        print("1")
-        user = request.user
-        profile = Profile.objects.get(user=user)
-        profile_searched = Profile.objects.get(user__username=username)
-
-        is_follower = FollowersCount.objects.filter(follower=profile, followed_user=profile_searched).first()
-        print("2")
-
-        if is_follower == None:
-            follower_created = FollowersCount.objects.create(follower=profile, followed_user=profile_searched)
-            follower_created.save()
-            print("3")
-            return redirect('profile', username=username)
-        else:
-            is_follower.delete()
-            return redirect('profile', username=username)
 
 
 def serve_image(request, image_path):
@@ -272,9 +239,8 @@ def serve_image(request, image_path):
     return FileResponse(open(image_full_path, 'rb'), content_type=content_type)
 
     
-
 @login_required(login_url='signin')
-def like_post_view(request):
+def like_post(request):
     user = request.user
     profile = Profile.objects.get(user=user)
     post_id = request.GET.get('post_id')
@@ -291,10 +257,8 @@ def like_post_view(request):
         return redirect('home')
 
 
-
-
 @login_required(login_url='signin')
-def follow_user_view(request, username):
+def follow_user(request, username):
     user = request.user
     profile = Profile.objects.get(user=user)
     profile_searched = Profile.objects.get(user__username=username)
@@ -310,7 +274,7 @@ def follow_user_view(request, username):
         return redirect('profile', username=username)
 
 
-
+#TODO: Make it so it only gets the notifications of the user connected
 def activity_view(request):
     profile = Profile.objects.get(user=request.user)
     # Obtener el número de seguidores y siguiendo (puedes implementar lógica real aquí)
