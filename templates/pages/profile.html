@@ -72,14 +72,19 @@
                                 <h5>Siguiendo</h5>
                                 <p>{{profile_searched.following_count}}</p>
                         </div>
-                        {% if profile_searched != profile %}
                         <div class="btn">
+                                {% if profile_searched.user.username != request.user.username and profile_searched not in following %}
                                 <form action="{% url 'follow-user' profile_searched.user.username %}" method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;">Seguir</button>
                                 </form>
+                                {% else %}
+                                <form action="{% url 'follow-user' profile_searched.user.username %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;"> Dejar de Seguir</button>
+                                </form>
+                                {% endif %}
                         </div>
-                        {% endif %}
                    </div>     
                 </div>
                 <div class="post">

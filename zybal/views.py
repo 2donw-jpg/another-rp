@@ -120,12 +120,16 @@ def settings_view(request):
 def home_view(request):
     profile = Profile.objects.get(user=request.user)
     posts = Post.objects.all().order_by('-created_at')
+    followers = profile.followers_data
+    following = profile.following_data
     for post in posts:
         post.user_has_liked = post.user_has_liked(profile)
 
     context = {
         'profile': profile,
         'posts': posts,
+        'followers': followers,
+        'following': following,
     }
     return render(request, 'pages/index.html', context)
 
@@ -157,6 +161,7 @@ def search_view(request):
     user_profile = Profile.objects.get(user=user_object)
 
     if request.method == 'POST':
+        username = request.POST.get('search')
         return redirect('profile', username=username)
 
 
@@ -196,6 +201,7 @@ def profile_view(request,username):
     profile = Profile.objects.get(user=request.user)
     profile_searched = Profile.objects.get(user__username=username)
     posts = Post.objects.filter(user__user__username = username).order_by('-created_at')
+    following = profile.following_data
     for post in posts:
         post.user_has_liked = post.user_has_liked(profile)
 
@@ -203,6 +209,7 @@ def profile_view(request,username):
         'profile': profile,
         'posts': posts,
         'profile_searched':profile_searched,
+        'following':following,
     }
 
     return render(request, 'pages/profile.html', context)

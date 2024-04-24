@@ -4,7 +4,7 @@ urlpatterns = [
     path('accounts/settings/', views.settings_view, name='settings'),
     path('accounts/login/', views.sign_in_view, name='sign_in'),
     path('accounts/register/', views.sign_up_view, name='sign_up'),
-    #path('accounts/password-reset/', views.password_reset_view, name='password_reset'),
+    # path('accounts/password-reset/', views.password_reset_view, name='password_reset'),
     path('accounts/logout/', views.sign_out_view, name='logout'),
 
     path('', views.home_view, name='home'),
