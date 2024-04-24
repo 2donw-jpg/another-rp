@@ -1,13 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
         <head>
-                <meta charset="UTF-8">
-                <meta name = "viewport" content="width=device-width, initial-scale=1.0">
-                <title>Zbal</title>
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-                <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
-                <link rel="stylesheet" href="style.css">
-                <link rel="stylesheet" href="lightbox.min.css">
+                {% include 'includes/head.html' %}
                 <style>
                         .contenedorPerfil{
                                 position: relative;
@@ -71,21 +65,26 @@
                    </div>
                    <div class="textoSeguidores">
                         <div class="grupoSeguidores">
-                                <h5>Seguidores:</h5>
+                                <h5>Seguidores</h5>
                                 <p>{{profile_searched.followers_count}}</p>
                         </div>
                         <div class="grupoSeguidos">
-                                <h5>Seguidos:</h5>
+                                <h5>Siguiendo</h5>
                                 <p>{{profile_searched.following_count}}</p>
                         </div>
-                        {% if profile_searched != profile %}
                         <div class="btn">
+                                {% if profile_searched.user.username != request.user.username and profile_searched not in following %}
                                 <form action="{% url 'follow-user' profile_searched.user.username %}" method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;">Seguir</button>
                                 </form>
+                                {% else %}
+                                <form action="{% url 'follow-user' profile_searched.user.username %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;"> Dejar de Seguir</button>
+                                </form>
+                                {% endif %}
                         </div>
-                        {% endif %}
                    </div>     
                 </div>
                 <div class="post">

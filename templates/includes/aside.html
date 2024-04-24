@@ -18,11 +18,11 @@
 
                 <!-- Followers and Following Count -->
                 <ul class="list-unstyled nav justify-content-center">
-                    <li class="nav-item me-3 mb-2">
-                        <a href="#" class="text-dark text-decoration-none">Followers<br><strong>{{ followers_count }}</strong></a>
+                    <li class="nav-item me-3 mb-2" style="margin-right: 10px;">
+                        <a href="#modal-followers" data-toggle="modal" class="text-dark text-decoration-none">Seguidores<br><strong>{{ profile.followers_count }}</strong></a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="#" class="text-dark text-decoration-none">Following<br><strong>{{ following_count }}</strong></a>
+                        <a href="#modal-following" data-toggle="modal" class="text-dark text-decoration-none">Siguiendo<br><strong>{{ profile.following_count }}</strong></a>
                     </li>
                 </ul>
                 

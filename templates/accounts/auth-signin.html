@@ -1,7 +1,9 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-{% include 'includes/head.html' %}
+    <head>
+    {% include 'includes/head.html' %}
+    </head>
 <body class="dark" style="background-color: #EEEEEE;">
 <div class="container">
     <div class="row justify-content-center align-items-center min-vh-100">
@@ -33,7 +35,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success btn-block">Iniciar Sesión</button>
-                        <p class="text-xs text-gray-500 mt-3 mb-0">Olvidó su contraseña? <a href="{% url 'password_reset' %}" class="text-success">Reiniciar contraseña</a></p>
+                        <!-- <p class="text-xs text-gray-500 mt-3 mb-0">Olvidó su contraseña? <a href="#" class="text-success">Reiniciar contraseña</a></p> -->
                         <p class="text-xs text-gray-500 mb-0">No tienes una cuenta? <a href="{% url 'sign_up' %}" class="text-success">Regístrate</a></p>
                     </form>
                 </div>

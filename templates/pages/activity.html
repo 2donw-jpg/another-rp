@@ -1,13 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zybal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="lightbox.min.css">
+    {% include 'includes/head.html' %}
     <style>
         .card {
             background-color: transparent;
@@ -65,9 +59,10 @@
                                             <div class="media">
                                                 <img src="{{ post.user.profile_image.url }}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
                                                 <div class="media-body">
-                                                    <h6><a href="#">@{{ post.user }}</a> le ha dado like a tu foto</h6>
+                                                    <h6><a href="{% url 'profile' post.user %}">@{{ post.user }}</a> le ha dado like a tu foto</h6>
                                                     <small>{{ post.created_at }}</small>
                                                 </div>
+                                               
                                             </div>
                                         </div>
                                     </div>
