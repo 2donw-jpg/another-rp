@@ -18,6 +18,11 @@
     .media {
         margin-bottom: 10px; /* Adjust the margin as needed */
     }
+    .button_question{
+        display: flex;
+        justify-content: flex-end;
+        margin-top: -8%;
+    }
 </style>
 </head>
 <body>
@@ -41,8 +46,18 @@
                             <div class="media-body">
                                 <h6><a href="{% url 'profile' follower %}">@{{ follower.user.username }}</a></h6>
                                 <p>{{follower.user.first_name}} {{follower.user.last_name}}</p>
-                                <p></p>
                             </div>
+                            {% if follower.user.username != request.user.username and follower not in following %}
+                            <form action="{% url 'follow-user' follower.user.username %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;">Seguir</button>
+                             </form>
+                             {% else %}
+                             <form action="{% url 'follow-user' follower.user.username %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;">Dejar de Seguir</button>
+                             </form>
+                             {% endif %}
                         </div>
                     </div>
                 </div>
