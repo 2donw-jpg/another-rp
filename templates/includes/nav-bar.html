@@ -25,7 +25,7 @@
         </ul>
 
         <search>
-            <form method="post" action="{% url 'search_user'%}" class="form-inline ml-auto d-none d-md-block mr-3" >
+            <form method="post" action="{% url 'search_view'%}" class="form-inline ml-auto d-none d-md-block mr-3" >
                 <input type="text" name="search" id="search" placeholder="Buscar usuario" class="form-control form-control-sm">
             </form>
         </search>
@@ -49,3 +49,5 @@
         </div>
     </div>
 </nav>
+
+{% include 'includes/modal-notifications.html' %}

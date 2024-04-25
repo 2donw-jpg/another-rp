@@ -1,17 +1,15 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from zybal.models import Profile, Post, LikePost, FollowersCount
 from django.contrib import messages
-from django.http import HttpResponse, FileResponse
+from django.http import FileResponse
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 from django.conf import settings
 import os
 from itertools import chain
 import mimetypes
-import random
-import string
+from fuzzywuzzy import process
 
 
 def sign_up_view(request):
@@ -62,37 +60,6 @@ def sign_out_view(request):
     logout(request)
     return redirect('sign_in')
 
-
-""" def password_reset_view(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        user = User.objects.get(email=email)  # Assuming you have a User model
-        if user is not None:
-
-            return render(request, 'accounts/auth-verification.html')
-        else:
-            return HttpResponse('No user found with that email address.')
-    
-    return render(request, 'accounts/auth-reset.html')
-        # Generate a random token
-        token = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-        
-        # Save token to the database
-        #password_reset_token = PasswordResetToken.objects.create(user=user, token=token)
-        
-        # Send email with token
-        send_mail(
-            'Password Reset',  # Subject
-            f'Click the following link to reset your password: {settings.BASE_URL}/reset_password/{token}',  # Message
-            'your_email@example.com',  # Sender email
-            [email],  # Recipient email
-            fail_silently=False
-        )
-        
-        return HttpResponse('Password reset email sent successfully.')
- """
-
-
 @login_required(login_url='sign_in')
 def settings_view(request):
     user = request.user
@@ -105,7 +72,7 @@ def settings_view(request):
         
         user.first_name = request.POST.get('first_name', user.first_name)
         user.last_name = request.POST.get('last_name', user.last_name)
-        user.save();
+        user.save()
         
         profile.bio = request.POST.get('bio', profile.bio)
         profile.phone_number = request.POST.get('phone_number', profile.phone_number)
@@ -159,22 +126,38 @@ def follow(request):
 def search_view(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)
+    username = request.POST.get('search')
+    context = {
+        'profile': user_profile,
+        'profile_search': username,
+    }
+    return render(request, 'pages/search.html', context)
 
-    if request.method == 'POST':
-        username = request.POST.get('search')
-        return redirect('profile', username=username)
-
-
-
-
-#TODO: It requieres to send an image as mandatory
 @login_required(login_url='signin')
 def search_user(request):
     if request.method == 'POST':
         username = request.POST.get('search')
         return redirect('profile', username)
 
+    user_object = User.objects.get(username=request.user.username)
+    user_profile = Profile.objects.get(user=user_object)
 
+    if request.method == 'POST':
+        username = request.POST['username']
+        username_object = User.objects.filter(username__icontains=username)
+
+        username_profile = []
+        username_profile_list = []
+
+        for users in username_object:
+            username_profile.append(users.id)
+
+        for ids in username_profile:
+            profile_lists = Profile.objects.filter(id_user=ids)
+            username_profile_list.append(profile_lists)
+        
+        username_profile_list = list(chain(*username_profile_list))
+    return render(request, 'search.html', {'user_profile': user_profile, 'username_profile_list': username_profile_list})
 
 
 
