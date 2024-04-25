@@ -18,6 +18,11 @@
     .media {
         margin-bottom: 10px; /* Adjust the margin as needed */
     }
+    .button_question{
+        display: flex;
+        justify-content: flex-end;
+        margin-top: -8%;
+    }
 </style>
 </head>
 <body>
@@ -32,19 +37,29 @@
             </button>
         </div>
         <div class="modal-body">
-            {% for post in posts %}
+            {% if profile.following_count %}
+            {% for followed_user in following %}
                 <div class="card">
                     <div class="card-body">
                         <div class="media">
-                            <img src="{{ post.user.profile_image.url }}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
+                            <img src="{{ followed_user.profile_image.url }}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
                             <div class="media-body">
-                                <h6><a href="#">@{{ post.user }}</a> le ha dado like a tu foto</h6>
-                                <small>{{ post.created_at }}</small>
+                                <h6><a href="{% url 'profile' followed_user %}">@{{ followed_user.user.username }}</a></h6>
+                                <p>{{followed_user.user.first_name}} {{followed_user.user.last_name}}</p>
+                                <div class="button_question">
+                                    <form action="{% url 'follow-user' followed_user.user.username %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;"> Dejar de Seguir</button>
+                                     </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             {% endfor %}
+            {% else %}
+            <p>No sigues a nadie</p>
+            {% endif %}
         </div>  
     </div>
 </div>

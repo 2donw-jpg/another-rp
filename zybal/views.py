@@ -9,6 +9,8 @@ from django.conf import settings
 import os
 from itertools import chain
 import mimetypes
+from fuzzywuzzy import process
+
 
 def sign_up_view(request):
     if request.method == 'POST':
@@ -84,16 +86,19 @@ def settings_view(request):
 def home_view(request):
     profile = Profile.objects.get(user=request.user)
     posts = Post.objects.all().order_by('-created_at')
-    notifications = Notification.objects.filter(user__id=profile.id).order_by('-created_at')
+    followers = profile.followers_data
+    following = profile.following_data
     for post in posts:
         post.user_has_liked = post.user_has_liked(profile)
 
     context = {
         'profile': profile,
         'posts': posts,
-        'notifications': notifications,
+        'followers': followers,
+        'following': following,
     }
     return render(request, 'pages/index.html', context)
+
 
 @login_required(login_url='sign_in')
 def follow(request):
@@ -116,6 +121,21 @@ def follow(request):
 def search_view(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)
+    username = request.POST.get('search')
+    context = {
+        'profile': user_profile,
+        'profile_search': username,
+    }
+    return render(request, 'pages/search.html', context)
+
+@login_required(login_url='signin')
+def search_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('search')
+        return redirect('profile', username)
+
+    user_object = User.objects.get(username=request.user.username)
+    user_profile = Profile.objects.get(user=user_object)
 
     if request.method == 'POST':
         username = request.POST['username']
@@ -133,13 +153,6 @@ def search_view(request):
         
         username_profile_list = list(chain(*username_profile_list))
     return render(request, 'search.html', {'user_profile': user_profile, 'username_profile_list': username_profile_list})
-
-@login_required(login_url='signin')
-def search_user(request):
-    if request.method == 'POST':
-        username = request.POST.get('search')
-        if(username != ""):
-            return redirect('profile', username)
 
 @login_required(login_url='signin')
 def upload(request):
@@ -162,6 +175,7 @@ def profile_view(request,username):
     profile = Profile.objects.get(user=request.user)
     profile_searched = Profile.objects.get(user__username=username)
     posts = Post.objects.filter(user__user__username = username).order_by('-created_at')
+    following = profile.following_data
     for post in posts:
         post.user_has_liked = post.user_has_liked(profile)
 
@@ -169,6 +183,7 @@ def profile_view(request,username):
         'profile': profile,
         'posts': posts,
         'profile_searched':profile_searched,
+        'following':following,
     }
 
     return render(request, 'pages/profile.html', context)

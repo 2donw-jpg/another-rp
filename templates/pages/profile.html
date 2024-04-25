@@ -1,89 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-        <head>
-                {% include 'includes/head.html' %}
-                <style>
-                        .contenedorPerfil{
-                                position: relative;
-                                margin: 0 auto;
-                                margin-top: 60px;
-                                width: fit-content;
-                                border-bottom: 3px solid #00976d;
-                                padding-bottom: 60px;
-                        }
-                        .textoPerfil{
-                                display: inline-block;
-                                vertical-align: top;
-                                margin-top: 35px;
-                                margin-left: 25px;
-                                border-right: 3px solid #00976d;
-                                padding-right: 100px;
-                        }
-                        .textoSeguidores{
-                                display: inline-block;
-                                vertical-align: top;
-                                margin-top: 35px;
-                                margin-left: 100px;
-                        }
-                        .grupoSeguidores,
-                        .grupoSeguidos{
-                                display: inline-block;
-                                vertical-align: top;
-                        }
-                        .grupoSeguidores h5,
-                        .grupoSeguidos h5{
-                                display: inline;
-                                margin-right: 40px;
-                        }
-                        .grupoSeguidores p,
-                        .grupoSeguidos p{
-                                margin-left: 40px;
-                                font-weight: bold;
-                        }
-                        .post{
-                                background-color: #f0eded;
-                                position: relative;
-                                margin: 0 auto;
-                                margin-top: 15px;
-                                width: 49%;
-                        }
-                        .btn{
-                                display: flex;
-                                margin: 10px;
-                        }                             
-                </style>
-        </head>
+<head>
+    {% include 'includes/head.html' %}
+    <style>
+        .contenedorPerfil {
+            position: relative;
+            margin: 0 auto;
+            margin-top: 60px;
+            width: fit-content;
+            border-bottom: 2px solid #00976d;
+            padding-bottom: 60px;
+        }
+        .textoPerfil {
+            display: inline-block;
+            vertical-align: top;
+            margin-top: 35px;
+            margin-left: 25px;
+            border-right: 3px solid #00976d;
+            padding-right: 100px;
+        }
+        .textoSeguidores {
+            display: inline-block;
+            vertical-align: top;
+            margin-top: 35px;
+            margin-left: 100px;
+        }
+        .grupoSeguidores,
+        .grupoSeguidos {
+            display: inline-block;
+            vertical-align: top;
+        }
+        .grupoSeguidores h5,
+        .grupoSeguidos h5 {
+            display: inline;
+            margin-right: 40px;
+        }
+        .grupoSeguidores p,
+        .grupoSeguidos p {
+            margin-left: 40px;
+            font-weight: bold;
+        }
+        .post {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                gap: 16px;
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 20px 10px;
+        }
+        .individual_post {
+            margin-right: 15px;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        .individual_post img {
+                width: 100%;
+                max-width: 350px;
+                height: 300px;
+                object-fit: cover;
+                border-radius: 10px;
+        }
+    </style>    
+</head>
+<body>
+    {% include 'includes/nav-bar.html' %}
 
-        <body>
-                {% include 'includes/nav-bar.html' %}
-                        
-                <div class="contenedorPerfil">
-                   <img src="{{profile_searched.profile_image.url}}" alt="Profile Picture" width="180px" height="180px" class="rounded-circle mr-3">
-                   <div class="textoPerfil">
-                        <h5>{{profile_searched.user.first_name}} {{profile_searched.user.last_name}}</h5>
-                        <p>@{{profile_searched.user}}</p>
-                   </div>
-                   <div class="textoSeguidores">
-                        <div class="grupoSeguidores">
-                                <h5>Seguidores</h5>
-                                <p>{{profile_searched.followers_count}}</p>
-                        </div>
-                        <div class="grupoSeguidos">
-                                <h5>Siguiendo</h5>
-                                <p>{{profile_searched.following_count}}</p>
-                        </div>
-                        {% if profile_searched != profile %}
-                        <div class="btn">
-                                <form action="{% url 'follow-user' profile_searched.user.username %}" method="post">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;">Seguir</button>
-                                </form>
-                        </div>
-                        {% endif %}
-                   </div>     
-                </div>
-                <div class="post">
-                        <p>Aqui van a ir los post :V</p>
-                </div>
-        </body>            <!-------------------------------NAvigation Starts------------------>
+
+    <div class="contenedorPerfil"> 
+    <div class="contenedorPerfil">
+       
+       
+        <img src="{{profile_searched.profile_image.url}}" alt="Profile Picture" width="180px" height="180px" class="rounded-circle mr-3">
+        <div class="textoPerfil">
+            <h5>{{profile_searched.user.first_name}} {{profile_searched.user.last_name}}</h5>
+            <p>@{{profile_searched.user}}</p>
+        </div>
+        <div class="textoSeguidores">
+            <div class="grupoSeguidores">
+                <h5>Seguidores</h5>
+                <p>{{profile_searched.followers_count}}</p>
+            </div>
+            <div class="grupoSeguidos">
+                <h5>Siguiendo</h5>
+                <p>{{profile_searched.following_count}}</p>
+            </div>
+            {% if profile_searched.user.username != request.user.username %}
+            <div class="btn">
+                {% if profile_searched not in following %}
+                <form action="{% url 'follow-user' profile_searched.user.username %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;">Seguir</button>
+                </form>
+                {% else %}
+                <form action="{% url 'follow-user' profile_searched.user.username %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;"> Dejar de Seguir</button>
+                </form>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>        
+    </div>
+
+
+    {% include 'includes/modal-post.html' %}
+    <div class="post">
+        {% for post in posts %}
+        <div class="individual_post">
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt="Post Image" width="100%" class="mb-3" data-toggle="modal" data-target="#imageModal" onclick="setModalImage('{{ post.image.url }}','{{ post.caption }}', '{{ post.likes_count }}', '{{ post.created_at }}')">
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+
+        function setModalImage(imageUrl, caption, likes, createdDate) {
+            document.getElementById('modalImage').src = imageUrl;
+            document.getElementById('modalCaption').innerText = caption;
+            document.getElementById('modalLikes').innerText = likes;
+            document.getElementById('modalCreatedDate').innerText = createdDate;
+        }
+</script>
+
+    <script src="lightbox-plus-jquery.min.js"></script>
+    <!-- Bootstrap and jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
 </html>

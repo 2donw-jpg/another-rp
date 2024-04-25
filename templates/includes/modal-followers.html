@@ -18,6 +18,11 @@
     .media {
         margin-bottom: 10px; /* Adjust the margin as needed */
     }
+    .button_question{
+        display: flex;
+        justify-content: flex-end;
+        margin-top: -8%;
+    }
 </style>
 </head>
 <body>
@@ -32,18 +37,34 @@
             </button>
         </div>
         <div class="modal-body">
-            {% for post in posts %}
+            {% if profile.followers_count %}
+            {% for follower in followers %}
                 <div class="card">
                     <div class="card-body">
                         <div class="media">
-                            <img src="{{ post.user.profile_image.url }}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
+                            <img src="{{ follower.profile_image.url }}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
                             <div class="media-body">
-                                <h6><a href="#">@{{ post.user }}</a> le ha dado like a tu foto</h6>
+                                <h6><a href="{% url 'profile' follower %}">@{{ follower.user.username }}</a></h6>
+                                <p>{{follower.user.first_name}} {{follower.user.last_name}}</p>
                             </div>
+                            {% if follower.user.username != request.user.username and follower not in following %}
+                            <form action="{% url 'follow-user' follower.user.username %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;">Seguir</button>
+                             </form>
+                             {% else %}
+                             <form action="{% url 'follow-user' follower.user.username %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;">Dejar de Seguir</button>
+                             </form>
+                             {% endif %}
                         </div>
                     </div>
                 </div>
             {% endfor %}
+        {% else %}
+            <p>No hay Seguidores</p>
+        {% endif %}        
         </div>  
     </div>
 </div>

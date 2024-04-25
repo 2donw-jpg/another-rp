@@ -20,6 +20,22 @@ class Profile(models.Model): #User Profile
     def following_count(self):
         return FollowersCount.objects.filter(follower=self).count()
     
+    @property
+    def followers_data(self):
+        followers = FollowersCount.objects.filter(followed_user=self)
+        followers = [follower.follower for follower in followers]
+
+        return followers
+    
+
+    @property
+    def following_data(self):
+        following = FollowersCount.objects.filter(follower=self)
+        following = [followed_user.followed_user for followed_user in following]
+
+        return following  
+
+
 class Post(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='post_images')
