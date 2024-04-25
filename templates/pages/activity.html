@@ -53,16 +53,16 @@
                     <div class="container">
                         <div class="row">
                             <div class="col">
-                                {% for post in posts %}
+                                {% for notification in notifications %}
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="media">
-                                                <img src="{{ post.user.profile_image.url }}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
+                                                <img src="{{ notification.sender.profile_image.url }}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
                                                 <div class="media-body">
-                                                    <h6><a href="{% url 'profile' post.user %}">@{{ post.user }}</a> le ha dado like a tu foto</h6>
-                                                    <small>{{ post.created_at }}</small>
+                                                    <h6><a href="{% url 'profile' notification.sender %}">@{{ notification.sender.user }}</a> le ha dado like a tu foto</h6>
+                                                    <small>{{  notification.created_at }}</small>
                                                 </div>
-                                               
+
                                             </div>
                                         </div>
                                     </div>

@@ -40,39 +40,35 @@
     
 </head>
 <body>
-    <!-- Navigation Bar -->
+
     {% include 'includes/nav-bar.html' %}
     {% include 'includes/modal-notifications.html' %}
     {% include 'includes/modal-followers.html' %}
     {% include 'includes/modal-following.html' %}
-    <!-- Notification Preview -->
+
     <div class="container">
         <div class="row">
-            <!-- Aside -->
+
             {% include 'includes/aside.html' %}
             <div class="col-md-9">
-                <!-- Tweet Form -->
                 <div class="middle-column">
                     <div class="card">
                         <div class="card-header bg-transparent">
-
-                            <form action="upload" method="POST" enctype="multipart/form-data" class="form-inline">
+                            <form action="{% url 'upload' %}" method="POST" enctype="multipart/form-data" class="form-inline">
                                 {% csrf_token %}
-                                <div class="card border-0">
                                     <div class="card-body">
                                         <div class="d-flex align-items-start">
                                             <img src="{{ profile.profile_image.url}}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
                                             <div class="flex-grow-1">
-                                                <textarea class="form-control border-0 bg-transparent" placeholder="Qué está pasando?" rows="1" name="caption"></textarea>
-                                                <input type="file" class="form-control-file mt-3" name="image_upload" accept="image/*" multiple>                                                <div class="preview-images"></div>
+                                                <textarea class="form-control border-0 bg-transparent" placeholder="Qué está pasando?" rows="2" name="caption"></textarea>
+                                                <input type="file" class="form-control-file mt-3" name="image_upload" accept="image/*" required>                                                <div class="preview-images"></div>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center mt-3">
                                             <span class="text-secondary"></span>
                                             <button type="submit" class="btn btn-primary">Tweet</button>
-                                        </div>
+                                        </div>                                        
                                     </div>
-                                </div>
                             </form>
 
 
