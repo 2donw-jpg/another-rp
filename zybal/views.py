@@ -101,7 +101,6 @@ def home_view(request):
     return render(request, 'pages/index.html', context)
 
 
-#TODO: Change the redirect dipshit
 @login_required(login_url='sign_in')
 def follow(request):
     if request.method == 'POST':
