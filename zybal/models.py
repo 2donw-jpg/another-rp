@@ -71,9 +71,10 @@ class Notification(models.Model):
 
     NOTIFICATION_CHOICES = [
         ('like', 'Like'),
-        ('comment', 'Comment'),
+        ('dislike', 'Dislike'),
         ('follow', 'Follow'),
-        # Add more choices as needed
+        ('unfollow', 'Unfollow'),
+        ('post','Post'),
     ]
 
     user = models.ForeignKey(Profile, related_name='user_notified', on_delete=models.CASCADE, null=True)

@@ -9,15 +9,27 @@
 <body>
     <!-- Navigation Bar -->
     {% include 'includes/nav-bar.html' %}
-    {% include 'includes/aside.html' %}
-    <!-- List of Possible Users -->
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2>Possible Users</h2>
+    <div class="container">
+        <div class="row">
+            <!-- Aside -->
+            {% include 'includes/aside.html' %}
+            <div class="col-md-9">
+                <h2>Listado de Usuarios</h2>
                 <ul class="list-group">
-                    {% for user in users %}
-                    <li class="list-group-item">{{ user.username }}</li>
+                    {% for user in username_profile_list %}
+                    <div class="card">
+                        <div class="card-body">
+                            <a href="{% url 'profile' user %}">
+                                <div class="media">
+                                    <img src="{{ user.profile_image.url }}" alt="Profile Picture" width="60px" height="60px" class="rounded-circle mr-3">
+                                    <div class="media-body">
+                                        <h6>@{{ user }}</a></h6>
+                                        <h6>{{user.user.first_name}} {{user.user.last_name}}</h6>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                     {% endfor %}
                 </ul>
             </div>

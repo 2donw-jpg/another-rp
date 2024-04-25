@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from zybal.models import Profile, Post, LikePost, FollowersCount
+from zybal.models import Profile, Post, LikePost, FollowersCount, Notification
 from django.contrib import messages
 from django.http import FileResponse
 from django.contrib.auth.decorators import login_required
@@ -9,7 +9,6 @@ from django.conf import settings
 import os
 from itertools import chain
 import mimetypes
-from fuzzywuzzy import process
 
 
 def sign_up_view(request):
@@ -89,6 +88,9 @@ def home_view(request):
     posts = Post.objects.all().order_by('-created_at')
     followers = profile.followers_data
     following = profile.following_data
+
+    notifications = Notification.objects.filter(user__id=profile.id).order_by('-created_at')
+
     for post in posts:
         post.user_has_liked = post.user_has_liked(profile)
 
@@ -97,8 +99,10 @@ def home_view(request):
         'posts': posts,
         'followers': followers,
         'following': following,
+        'notifications': notifications,
     }
     return render(request, 'pages/index.html', context)
+
 
 
 @login_required(login_url='sign_in')
@@ -122,44 +126,38 @@ def follow(request):
 
 #TODO Make a search html page
 @login_required(login_url='sign_in')
-def search_view(request):
+def search_user(request):
     user_object = User.objects.get(username=request.user.username)
-    user_profile = Profile.objects.get(user=user_object)
+    profile = Profile.objects.get(user=user_object)
+    notifications = Notification.objects.filter(user__id=profile.id).order_by('-created_at')
     username = request.POST.get('search')
     context = {
-        'profile': user_profile,
+        'notifications': notifications,
+        'profile': profile,
         'profile_search': username,
+        'notifications': notifications,
     }
     return render(request, 'pages/search.html', context)
 
 @login_required(login_url='signin')
-def search_user(request):
+def search_view(request):
+
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    notifications = Notification.objects.filter(user__id=profile.id).order_by('-created_at')    
     if request.method == 'POST':
-        username = request.POST.get('search')
-        return redirect('profile', username)
-
-    user_object = User.objects.get(username=request.user.username)
-    user_profile = Profile.objects.get(user=user_object)
-
-    if request.method == 'POST':
-        username = request.POST['username']
-        username_object = User.objects.filter(username__icontains=username)
-
-        username_profile = []
         username_profile_list = []
-
-        for users in username_object:
-            username_profile.append(users.id)
-
-        for ids in username_profile:
-            profile_lists = Profile.objects.filter(id_user=ids)
-            username_profile_list.append(profile_lists)
         
-        username_profile_list = list(chain(*username_profile_list))
-    return render(request, 'search.html', {'user_profile': user_profile, 'username_profile_list': username_profile_list})
+        search_username = request.POST.get('search')
+        matching_users = User.objects.filter(username__icontains=search_username)
+        
+        for user_obj in matching_users:
+            matching_profiles = Profile.objects.filter(user=user_obj)
+            username_profile_list.extend(matching_profiles)
+    else:
+        username_profile_list = []  
 
-
-
+    return render(request, 'pages/search.html', {'profile': profile, 'username_profile_list': username_profile_list, 'notifications': notifications,})
 
 #TODO: It requieres to send an image as mandatory
 @login_required(login_url='signin')
@@ -183,6 +181,7 @@ def profile_view(request,username):
     profile = Profile.objects.get(user=request.user)
     profile_searched = Profile.objects.get(user__username=username)
     posts = Post.objects.filter(user__user__username = username).order_by('-created_at')
+    notifications = Notification.objects.filter(user__id=profile.id).order_by('-created_at')
     following = profile.following_data
     for post in posts:
         post.user_has_liked = post.user_has_liked(profile)
@@ -192,6 +191,7 @@ def profile_view(request,username):
         'posts': posts,
         'profile_searched':profile_searched,
         'following':following,
+        'notifications': notifications,
     }
 
     return render(request, 'pages/profile.html', context)
@@ -218,8 +218,13 @@ def like_post(request):
     if like_filter == None:
         new_like = LikePost.objects.create(post_id=post_id, username=profile)
         new_like.save()
+
+        new_notification = Notification.objects.create(user=post.user,sender=profile,notification_type='like',target_post_id=post_id)
+        new_notification.save()
         return redirect('home')
     else:
+        new_notification = Notification.objects.create(user=post.user,sender=profile,notification_type='dislike',target_post_id=post_id)
+        new_notification.save()
         like_filter.delete()
         return redirect('home')
 
@@ -235,26 +240,25 @@ def follow_user(request, username):
     if is_follower == None:
         follower_created = FollowersCount.objects.create(follower=profile, followed_user=profile_searched)
         follower_created.save()
+
+        new_notification = Notification.objects.create(user=profile_searched,sender=profile,notification_type='follow')
+        new_notification.save()
         return redirect('profile', username=username)
     else:
         is_follower.delete()
+        new_notification = Notification.objects.create(user=profile_searched,sender=profile,notification_type='unfollow')
+        new_notification.save()
         return redirect('profile', username=username)
 
 
 #TODO: Make it so it only gets the notifications of the user connected
 def activity_view(request):
     profile = Profile.objects.get(user=request.user)
-    # Obtener el número de seguidores y siguiendo (puedes implementar lógica real aquí)
-    followers_count = len(FollowersCount.objects.filter(follower_id=profile))
-    following_count = len(FollowersCount.objects.filter(followed_user=profile))
     posts = Post.objects.all().order_by('-created_at')
-    for post in posts:
-        post.user_has_liked = post.user_has_liked(profile)
 
+    notifications = Notification.objects.filter(user__id=profile.id).order_by('-created_at')
     context = {
         'profile': profile,
-        'followers_count': followers_count,
-        'following_count': following_count,
-        'posts': posts,
+        'notifications': notifications,
     }
     return render(request, 'pages/activity.html', context)
