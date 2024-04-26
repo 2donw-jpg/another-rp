@@ -29,11 +29,21 @@
                         <div class="mb-4">
                             <input type="email" name="email" class="form-control mb-3" placeholder="Correo electrónico" autocapitalize="none" autocomplete="email" maxlength="254" required="" id="id_email">
                         </div>
-                        <div class="mb-6">
-                            <input type="password" name="password1" class="form-control mb-3" placeholder="Contraseña" required="" id="id_password1">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="password" name="password1" class="form-control mb-3" placeholder="Contraseña" required="" id="id_password1">
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="id_password1" style="height: 38px;">
+                                    <img src="../../media/SVG/ojo-cruzado.svg" alt="Mostrar Contraseña" width="20px" height="20px">
+                                </button>
+                            </div>
                         </div>
-                        <div class="mb-6">
-                            <input type="password" name="password2" class="form-control" placeholder="Confirmar Contraseña" required="" id="id_password2">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="password" name="password2" class="form-control" placeholder="Confirmar Contraseña" required="" id="id_password2">
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="id_password2" style="height: 38;">
+                                    <img src="../../media/SVG/ojo-cruzado.svg" alt="Mostrar Contraseña" width="20px" height="20px">
+                                </button>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-success btn-block mt-3">Registrarse</button>
                         <p class="text-xs text-gray-500 mt-3">Ya tienes una cuenta? <a href="{% url 'sign_in' %}" class="text-success">Inicia Sesión</a></p>
@@ -56,5 +66,24 @@
     });
 </script>
 {% endif %}
+
+<script>
+    $(document).ready(function() {
+        $(".toggle-password").click(function() {
+            var targetId = $(this).data("target");
+            var passwordField = $("#" + targetId);
+            var passwordFieldType = passwordField.attr("type");
+            var passwordIcon = $(this).find("img");
+
+            if (passwordFieldType === "password") {
+                passwordField.attr("type", "text");
+                passwordIcon.attr("src", "../../media/SVG/ojo.svg");
+            } else {
+                passwordField.attr("type", "password");
+                passwordIcon.attr("src", "../../media/SVG/ojo-cruzado.svg");
+            }
+        });
+    });
+</script>
 </body>
 </html>

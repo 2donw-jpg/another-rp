@@ -47,7 +47,7 @@
                                 <h6><a href="{% url 'profile' followed_user %}">@{{ followed_user.user.username }}</a></h6>
                                 <p>{{followed_user.user.first_name}} {{followed_user.user.last_name}}</p>
                                 <div class="button_question">
-                                    <form action="{% url 'follow-user' followed_user.user.username %}" method="post">
+                                    <form action="{% url 'follow-modal' followed_user.user.username %}" method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;"> Dejar de Seguir</button>
                                      </form>

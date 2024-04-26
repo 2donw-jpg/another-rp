@@ -48,12 +48,12 @@
                                 <p>{{follower.user.first_name}} {{follower.user.last_name}}</p>
                             </div>
                             {% if follower.user.username != request.user.username and follower not in following %}
-                            <form action="{% url 'follow-user' follower.user.username %}" method="post">
+                            <form action="{% url 'follow-modal' follower.user.username %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;">Seguir</button>
                              </form>
                              {% else %}
-                             <form action="{% url 'follow-user' follower.user.username %}" method="post">
+                             <form action="{% url 'follow-modal' follower.user.username %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-primary" style="background-color: #026842; font-weight: bold;">Dejar de Seguir</button>
                              </form>

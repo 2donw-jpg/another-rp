@@ -3,11 +3,12 @@
 <head>
     {% include 'includes/head.html' %}
     <style>
+
         .contenedorPerfil {
             position: relative;
             margin: 0 auto;
             margin-top: 60px;
-            width: fit-content;
+            width: 100%;
             border-bottom: 2px solid #00976d;
             padding-bottom: 60px;
         }
@@ -50,14 +51,14 @@
         .post {
             display: grid;
             grid-template-columns: repeat(3, 1fr); /* 3 columns */
-            /* grid-gap: 10px;  */
-            /* flex-direction: row; */
-            /* flex-wrap: wrap; */
             justify-content: center;
+            overflow-x: hidden;
             align-items: center;
-            max-width: 1400px;
-            /* margin: 20px; */
+            max-width: 968px;
             padding: 20px 10px;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
         }
         .individual_post {
             margin-right: 15px;

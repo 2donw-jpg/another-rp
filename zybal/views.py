@@ -249,6 +249,22 @@ def follow_user(request, username):
         new_notification = Notification.objects.create(user=profile_searched,sender=profile,notification_type='unfollow')
         new_notification.save()
         return redirect('profile', username=username)
+    
+@login_required(login_url='signin')
+def follow_modal(request, username):
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    profile_searched = Profile.objects.get(user__username=username)
+
+    is_follower = FollowersCount.objects.filter(follower=profile, followed_user=profile_searched).first()
+
+    if is_follower == None:
+        follower_created = FollowersCount.objects.create(follower=profile, followed_user=profile_searched)
+        follower_created.save()
+        return redirect('home')
+    else:
+        is_follower.delete()
+        return redirect('home')
 
 
 #TODO: Make it so it only gets the notifications of the user connected
